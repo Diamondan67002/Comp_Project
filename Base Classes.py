@@ -4,6 +4,7 @@ class Track():
     def __init__(self):
         self.connections=['','']
         self.vehicle=''
+        self.image=''
 
     def add_connection(self,direction,object,object_end):
         self.connections[direction]=[object,object_end]
@@ -23,6 +24,7 @@ class Point(Track):
         self.connections=['','','']
         self.direction=True
         self.hand=False
+        self.image=[]
 
     def change_point(self):
         if self.direction==True:
