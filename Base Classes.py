@@ -19,7 +19,7 @@ class Track():
 
 class Point(Track):
     def __init__(self):
-        super().__init__()
+        super().__init__()###????????????????????
         self.connections=['','','']
         self.direction=True
         self.hand=False
@@ -30,7 +30,7 @@ class Point(Track):
         elif self.direction==False:
             self.direction=True
 
-    def set_hand(self):
+    def change_hand(self):
         if self.hand==True:
             self.hand=False
         elif self.hand==False:
@@ -48,5 +48,5 @@ class Siding():
 
 class DeadEndSiding(Siding):
     def __init__(self):
-        super().__init__()
+        super().__init__()###???????????????????
         self.connections=['']
