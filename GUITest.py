@@ -18,5 +18,7 @@ class GUI():
 
         pygame.quit()
 
+    def load_Map(self):
+        ##
 
 GUI()
