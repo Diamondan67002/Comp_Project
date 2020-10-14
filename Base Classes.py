@@ -1,6 +1,7 @@
 import pygame
 
 class Track():
+    images=[]
     def __init__(self):
         self.connections=['','']
         self.vehicle=''
@@ -18,13 +19,16 @@ class Track():
     def check_vehicle(self):
         return self.vehicle
 
+    def change_orient(self):
+        self.image=self.images[]
+
 class Point(Track):
+    images=[]
     def __init__(self):
         super().__init__()###????????????????????
         self.connections=['','','']
-        self.direction=True
+        self.direction=False
         self.hand=False
-        self.image=[]
 
     def change_point(self):
         if self.direction==True:
