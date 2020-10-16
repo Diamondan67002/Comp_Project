@@ -5,6 +5,8 @@ class Track():
     def __init__(self,type_num):
         self.connections=['','']
         self.vehicle=''
+        self.orientation=False
+        self.curve=False
         self.image=self.images[type_num]
 
     def add_connection(self,direction,object,object_end):
@@ -19,6 +21,18 @@ class Track():
     def check_vehicle(self):
         return self.vehicle
 
+    def change_orientation(self):
+        if self.orientation == True:
+            self.orientation = False
+        elif self.orientation == False:
+            self.orientation = True
+
+    def change_curve(self):
+        if self.curve == True:
+            self.curve = False
+        elif self.curve== False:
+            self.curve = True
+
 class Point(Track):
     images=[]
     def __init__(self,type_num,hand_type):
@@ -29,7 +43,7 @@ class Point(Track):
 
     def change_point(self):
         if self.direction==True:
-            self.directions=False
+            self.direction=False
         elif self.direction==False:
             self.direction=True
 
