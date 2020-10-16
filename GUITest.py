@@ -1,7 +1,7 @@
 import pygame
 
 
-class GUI():
+class GUI():###### need tp find were I got this from.
     def __init__(self):
         pygame.init()
 
