@@ -2,10 +2,10 @@ import pygame
 
 class Track():
     images=[]
-    def __init__(self):
+    def __init__(self,type_num):
         self.connections=['','']
         self.vehicle=''
-        self.image=''
+        self.image=self.images[type_num]
 
     def add_connection(self,direction,object,object_end):
         self.connections[direction]=[object,object_end]
@@ -21,11 +21,11 @@ class Track():
 
 class Point(Track):
     images=[]
-    def __init__(self):
+    def __init__(self,type_num,hand_type):
         super().__init__()###????????????????????
         self.connections=['','','']
         self.direction=False
-        self.hand=False
+        self.hand=hand_type
 
     def change_point(self):
         if self.direction==True:
