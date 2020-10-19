@@ -2,12 +2,12 @@ import pygame
 
 class Track():
     images=[]
-    def __init__(self,type_num):
+    def __init__(self):
         self.connections=['','']
         self.vehicle=''
         self.orientation=False
         self.curve=False
-        self.image=self.images[type_num]
+        self.image=self.images[0]
 
     def add_connection(self,direction,object,object_end):
         self.connections[direction]=[object,object_end]
@@ -33,13 +33,16 @@ class Track():
         elif self.curve== False:
             self.curve = True
 
+    def set_image(self,img_num):
+        self.image=self.images[img_num]
+
 class Point(Track):
     images=[]
-    def __init__(self,type_num,hand_type):
+    def __init__(self):
         super().__init__()###????????????????????
         self.connections=['','','']
         self.direction=False
-        self.hand=hand_type
+        self.hand=0
 
     def change_point(self):
         if self.direction==True:
