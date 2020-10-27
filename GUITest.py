@@ -25,8 +25,10 @@ class GUI():
                     if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40:
                         running = False
 
-            mouse=pygame.mouse.get_pos()
+
             screen.fill((255, 255, 255))
+
+            mouse = pygame.mouse.get_pos()###GforG
             if width / 2 <= mouse[0] <= width / 2 + 140 and height / 2 <= mouse[1] <= height / 2 + 40:###GforG
                 pygame.draw.rect(screen, color_light, [width / 2, height / 2, 140, 40])
             else:
