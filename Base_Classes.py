@@ -34,7 +34,7 @@ class Track(pygame.sprite.Sprite):
         elif self.curve== False:
             self.curve = True
 
-    def set_image(self,img_num):
+    def set_image(self,img_num):### Integrated into constructor
         self.image=self.images[img_num]
 
 class Point(Track):
