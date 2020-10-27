@@ -42,4 +42,7 @@ class GUI():
     def load_Map(self):
         print("Hi")
 
+    def add_component(self):
+        print('Hi')
+
 GUI()
