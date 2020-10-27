@@ -1,5 +1,5 @@
 import pygame
-
+import Base_Classes
 
 class GUI():
     def __init__(self):
