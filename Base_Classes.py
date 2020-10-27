@@ -3,7 +3,7 @@ import pygame
 class Track(pygame.sprite.Sprite):
     images=[]
     def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)##Need to continue
         self.connections=['','']
         self.vehicle=''
         self.orientation=False
