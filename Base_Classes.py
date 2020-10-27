@@ -1,8 +1,9 @@
 import pygame
 
-class Track():
+class Track(pygame.sprite.Sprite):
     images=[]
     def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
         self.connections=['','']
         self.vehicle=''
         self.orientation=False
