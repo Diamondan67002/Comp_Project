@@ -1,8 +1,9 @@
 import pygame
 
-class Track():
+class Track(pygame.sprite.Sprite):
     images=[]
     def __init__(self):
+        pygame.sprite.Sprite.__init__(self)##Need to continue
         self.connections=['','']
         self.vehicle=''
         self.orientation=False
@@ -33,13 +34,13 @@ class Track():
         elif self.curve== False:
             self.curve = True
 
-    def set_image(self,img_num):
+    def set_image(self,img_num):### Integrated into constructor
         self.image=self.images[img_num]
 
 class Point(Track):
     images=[]
     def __init__(self):
-        super().__init__()###????????????????????
+        super().__init__()###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
         self.connections=['','','']
         self.direction=False
         self.hand=0
