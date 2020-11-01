@@ -2,13 +2,20 @@ import pygame
 
 class Track(pygame.sprite.Sprite):
     images=[]
-    def __init__(self):
+    def __init__(self,x,y,img):
         pygame.sprite.Sprite.__init__(self)##Need to continue
+        self.image = pygame.image.load(os.path.join(self.images[img]))
+        self.image.convert_alpha()
+        self.image.set_colorkey(ALPHA)
+        self.rect = self.image.get_rect
+        self.rect.x = x
+        self.rect.y = y
+
         self.connections=['','']
         self.vehicle=''
-        self.orientation=False
-        self.curve=False
-        self.image=self.images[0]
+        ##self.orientation=False
+        ##self.curve=False
+        ##self.image=self.images[0]
 
     def add_connection(self,direction,object,object_end):
         self.connections[direction]=[object,object_end]
