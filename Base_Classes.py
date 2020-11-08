@@ -6,13 +6,13 @@ class Track(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)##Need to continue
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
-        self.image.set_colorkey(ALPHA)
+        self.image.set_colorkey(ALPHA)###????????
         self.rect = self.image.get_rect
         self.rect.x = x
         self.rect.y = y
 
-        self.connections=['','']
-        self.vehicle=''
+        self.connections=[-1,-1]
+        ##self.vehicle=''
         ##self.orientation=False
         ##self.curve=False
         ##self.image=self.images[0]
@@ -48,7 +48,7 @@ class Point(Track):
     images=[]
     def __init__(self):
         super().__init__()###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
-        self.connections=['','','']
+        self.connections=[-1,-1,-1]
         self.direction=False
         self.hand=0
 
