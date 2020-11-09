@@ -28,9 +28,9 @@ class Game():
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:  ###GforG
                     if positions[0][0] <= mouse[0] <= positions[0][0] + 100 and positions[0][1] <= mouse[1] <= positions[0][1] + 30:
-                        ## self.map.add_Track
+                        print("Hi")## self.map.add_Track
                     elif positions[1][0] <= mouse[0] <= positions[1][0] + 100 and positions[1][1] <= mouse[1] <= positions[1][1] + 30:
-                        ## self.map.add_point
+                        print("Hi")## self.map.add_point
                     elif positions[2][0] <= mouse[0] <= positions[2][0] + 100 and positions[2][1] <= mouse[1] <= positions[2][1] + 30:
                         running = False
 
