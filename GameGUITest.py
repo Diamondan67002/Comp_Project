@@ -17,9 +17,9 @@ class Game():
         height = screen.get_height()
         smallfont = pygame.font.SysFont('Corbel', 25)
         text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color)]
-        positions = [[0,470,100,500,100,30],
-                     [100,470,200,500,100,30],
-                     [200,470,300,500,100,30]]### Need to move to be resizable possibly.
+        positions = [[0,470,100,30],
+                     [100,470,100,30],
+                     [200,470,100,30]]### Need to move to be resizable possibly.
 
         running = True
         while running:
@@ -27,21 +27,21 @@ class Game():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:  ###GforG
-                    if positions[0][0] <= mouse[0] <= positions[0][2] and positions[0][1] <= mouse[1] <= positions[0][3]:
+                    if positions[0][0] <= mouse[0] <= positions[0][0] + positions[0][2] and positions[0][1] <= mouse[1] <= positions[0][1] + positions[0][3]:
                         self.map.add_track()
-                    elif positions[1][0] <= mouse[0] <= positions[1][2] and positions[1][1] <= mouse[1] <= positions[1][3]:
+                    elif positions[1][0] <= mouse[0] <= positions[1][0] + positions[1][2] and positions[1][1] <= mouse[1] <= positions[1][1] + positions[1][3]:
                         self.map.add_point()
-                    elif positions[2][0] <= mouse[0] <= positions[2][2] and positions[2][1] <= mouse[1] <= positions[2][3]:
+                    elif positions[2][0] <= mouse[0] <= positions[2][0] + positions[2][2] and positions[2][1] <= mouse[1] <= positions[2][1] + positions[2][3]:
                         running = False
 
             screen.fill((255, 255, 255))
 
             mouse = pygame.mouse.get_pos()  ###GforG the correct places.
             for i in range(len(positions)):
-                if positions[i][0] <= mouse[0] <= positions[i][2] and positions[i][1] <= mouse[1] <= positions[i][3]: ### Altered from GforG
-                    pygame.draw.rect(screen, color_light, [positions[i][0],positions[i][1],positions[i][4],positions[i][5]])
+                if positions[i][0] <= mouse[0] <= positions[i][0] + positions[i][2] and positions[i][1] <= mouse[1] <= positions[i][1] + positions[i][3]: ### Altered from GforG
+                    pygame.draw.rect(screen, color_light, [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
                 else:
-                    pygame.draw.rect(screen, color_dark, [positions[i][0],positions[i][1],positions[i][4],positions[i][5]])
+                    pygame.draw.rect(screen, color_dark, [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
                 screen.blit(text[i], (positions[i][0] + 20, positions[i][1]+5))
 
             pygame.display.flip()
@@ -56,6 +56,9 @@ class Map():
         print('Hi')
     def add_point(self):
         print('Hi')
+
+    def build_inglenook(self):
+        print("Hi")
 
 game=Game()
 game.build_GUI()

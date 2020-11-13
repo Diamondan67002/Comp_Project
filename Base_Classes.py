@@ -49,20 +49,20 @@ class Point(Track):
     def __init__(self):
         super().__init__()###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
         self.connections=[-1,-1,-1]
-        self.direction=False
+        self.pointBlade=PointBlade()
         self.hand=0
 
-    def change_point(self):
-        if self.direction==True:
-            self.direction=False
-        elif self.direction==False:
-            self.direction=True
-
     def change_hand(self):
-        if self.hand==True:
-            self.hand=False
-        elif self.hand==False:
-            self.hand=True
+        self.hand=1-self.hand
+
+class PointBlade():
+    images=[]
+    def __init__(self):
+        self.image=self.images[0]
+        self.direction=0
+
+    def changeDirection(self):
+        self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
 
 class Siding():
     def __init__(self):
@@ -78,3 +78,7 @@ class DeadEndSiding(Siding):
     def __init__(self):
         super().__init__()###???????????????????
         self.connections=['']
+
+class Wagon():
+    def __init__(self,name):
+        self.name=name
