@@ -7,18 +7,18 @@ class Track(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
         self.image.set_colorkey(ALPHA)###????????
-        self.rect = self.image.get_rect
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
         self.connections=[-1,-1]
-        ##self.vehicle=''
-        ##self.orientation=False
-        ##self.curve=False
+        self.vehicle=''
+        self.orientation=0
+        self.curve=0
         ##self.image=self.images[0]
 
-    def add_connection(self,direction,object,object_end):
-        self.connections[direction]=[object,object_end]
+    def add_connection(self,direction,lineNum,posNum):
+        self.connections[direction]=[lineNum,posNum]
 
     def add_vehicle(self,vehicle):
         self.vehicle=vehicle
@@ -30,16 +30,10 @@ class Track(pygame.sprite.Sprite):
         return self.vehicle
 
     def change_orientation(self):
-        if self.orientation == True:
-            self.orientation = False
-        elif self.orientation == False:
-            self.orientation = True
+        self.orientation=1-self.orientation
 
     def change_curve(self):
-        if self.curve == True:
-            self.curve = False
-        elif self.curve== False:
-            self.curve = True
+        self.curve=1-self.curve
 
     def set_image(self,img_num):### Integrated into constructor
         self.image=self.images[img_num]
@@ -68,7 +62,7 @@ class Siding():
     def __init__(self):
         self.track=[]
         self.length=0
-        self.connections=['','']
+        self.connections=[-1,-1]
 
     def add_track(self):
         self.track.append(Track)
@@ -77,8 +71,12 @@ class Siding():
 class DeadEndSiding(Siding):
     def __init__(self):
         super().__init__()###???????????????????
-        self.connections=['']
+        self.connections=[-1]
 
 class Wagon():
     def __init__(self,name):
         self.name=name
+
+class Line():
+    def __init__(self):
+        print("Hi")
