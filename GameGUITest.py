@@ -20,7 +20,7 @@ class Game():
         positions = [[0,470,100,30],
                      [100,470,100,30],
                      [200,470,100,30]]### Need to move to be resizable possibly.
-        instructions=[]
+        instructions=[self.map.add_track(),self.map.add_point(),]
 
         running = True
         while running:
@@ -60,7 +60,11 @@ class Map():
         print('Hi')
 
     def build_inglenook(self):
-        print("Hi")
+        setup=[[3,-1,5],
+               [-1,3],
+               [3]]
+        for i in range(3):
+            self.map.append(Base_Classes.Line(setup[i]))
 
 game=Game()
 game.build_GUI()

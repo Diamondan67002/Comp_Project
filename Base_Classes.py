@@ -59,10 +59,11 @@ class PointBlade():
         self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
 
 class Siding():
-    def __init__(self):
+    def __init__(self,length):
         self.track=[]
-        self.length=0
+        self.length=length
         self.connections=[-1,-1]
+        sel
 
     def add_track(self):
         self.track.append(Track)
@@ -70,6 +71,10 @@ class Siding():
 
     def pre_add_track(self):
         self.track.insert(0,Track)
+
+    def buildSiding(self,length):
+        for i in range(length):
+            self.track.append(Track())### Need to set up all the alignments of x and y coords coming down from the initial map function.
 
 class DeadEndSiding(Siding):
     def __init__(self):
@@ -81,8 +86,13 @@ class Wagon():
         self.name=name
 
 class Line():
-    def __init__(self):
+    def __init__(self,setup):
         self.line=[]
+        self.buildLine(setup)
 
-    def buildLine(self):
-        print("Hi")
+    def buildLine(self,setup):
+        for i in range(len(setup)):
+            if setup[i]==-1:
+                self.line.append(Point)
+            elif setup[i]>=1:
+                self.line.append(Siding(setup[i]))
