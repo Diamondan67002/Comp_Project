@@ -68,6 +68,9 @@ class Siding():
         self.track.append(Track)
         self.length=self.length+1
 
+    def pre_add_track(self):
+        self.track.insert(0,Track)
+
 class DeadEndSiding(Siding):
     def __init__(self):
         super().__init__()###???????????????????
@@ -79,4 +82,7 @@ class Wagon():
 
 class Line():
     def __init__(self):
+        self.line=[]
+
+    def buildLine(self):
         print("Hi")

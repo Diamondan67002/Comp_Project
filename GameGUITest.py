@@ -20,6 +20,7 @@ class Game():
         positions = [[0,470,100,30],
                      [100,470,100,30],
                      [200,470,100,30]]### Need to move to be resizable possibly.
+        instructions=[]
 
         running = True
         while running:
@@ -49,6 +50,7 @@ class Game():
         pygame.quit()
 
 class Map():
+    map=[]
     def __init__(self):
         print('Hi')
 
