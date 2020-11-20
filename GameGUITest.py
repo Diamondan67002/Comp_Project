@@ -64,7 +64,7 @@ class Map():
     def build_inglenook(self):
         startCoords=[0,0]
         setup=[[[3,[0,0,0]],[-1,0],[5,[0,0,0,0,0]]],### Each row is a Line()
-               [[-1,1],[3,[0,0,0]],### Each item in a row is a Siding() or Point()
+               [[-1,1],[3,[0,0,0]]],### Each item in a row is a Siding() or Point()
                [[3,[1,0,0]]]]### Each of these then have a list or number which shows the images used from left to right
         for i in range(3):
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i*32]))##need to configure the y coords and the orientations
