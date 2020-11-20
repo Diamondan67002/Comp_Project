@@ -2,7 +2,7 @@ import pygame
 
 class Track(pygame.sprite.Sprite):
     images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
-    def __init__(self,startCoords,img):
+    def __init__(self,startCoords,img,initConnect):
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
@@ -17,6 +17,7 @@ class Track(pygame.sprite.Sprite):
         self.orientation=0
         self.curve=0
         ##self.image=self.images[0]
+        self.add_connection(initConnect[0],initConnect[1],initConnect[2])
 
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction]=[lineNum,posNum]
@@ -41,7 +42,7 @@ class Track(pygame.sprite.Sprite):
 
 class Point(Track):
     images=["Point-straight.png","Point-diagonal.png"]
-    def __init__(self,startCoords,img):
+    def __init__(self,startCoords,img,initConnect):
         print("Point Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
@@ -55,6 +56,7 @@ class Point(Track):
         self.connections=[-1,-1,-1]
         self.pointBlade=PointBlade()
         self.hand=0
+        self.add_connection(initConnect[0],initConnect[1],initConnect[2])
 
     def change_hand(self):
         self.hand=1-self.hand
@@ -69,7 +71,7 @@ class PointBlade():
         self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
 
 class Siding():
-    def __init__(self,length,startCoords):
+    def __init__(self,length,startCoords,imgNums):
         print("Siding Commenced")
         self.track=[]
         self.length=length
@@ -83,7 +85,7 @@ class Siding():
     def pre_add_track(self):
         self.track.insert(0,Track)
 
-    def buildSiding(self,length):
+    def buildSiding(self,length,imgNums):
         for i in range(length):
             self.track.append(Track())### Need to set up all the alignments of x and y coords coming down from the initial map function.
 
@@ -103,9 +105,9 @@ class Line():
 
     def buildLine(self,setup,coords):
         for i in range(len(setup)):
-            if setup[i]==-1:
-                self.line.append(Point(coords))#### Need to continue passing though the GUI coords.
+            if setup[i][0]==-1:
+                self.line.append(Point(coords,setup[i][1]))#### Need to continue passing though the GUI coords.
                 coords[0]=coords[0]+32
-            elif setup[i]>=1:
-                self.line.append(Siding(setup[i]))
+            elif setup[i][0]>=1:
+                self.line.append(Siding(setup[i],coords,setup[i][1]))
                 coords[0]=coords[0]+setup[i]*32
