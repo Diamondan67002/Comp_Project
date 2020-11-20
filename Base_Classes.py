@@ -2,14 +2,14 @@ import pygame
 
 class Track(pygame.sprite.Sprite):
     images=[]
-    def __init__(self,x,y,img):
-        pygame.sprite.Sprite.__init__(self)##Need to continue
+    def __init__(self,startCoords,img):
+        pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
         self.image.set_colorkey(ALPHA)###????????
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.x = startCoords[0]
+        self.rect.y = startCoords[1]
 
         self.connections=[-1,-1]
         self.vehicle=''
@@ -40,8 +40,16 @@ class Track(pygame.sprite.Sprite):
 
 class Point(Track):
     images=[]
-    def __init__(self):
-        super().__init__()###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
+    def __init__(self,startCoords,img):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join(self.images[img]))
+        self.image.convert_alpha()
+        self.image.set_colorkey(ALPHA)  ###????????
+        self.rect = self.image.get_rect()
+        self.rect.x = startCoords[0]
+        self.rect.y = startCoords[1]
+
+        ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
         self.connections=[-1,-1,-1]
         self.pointBlade=PointBlade()
         self.hand=0
@@ -59,14 +67,14 @@ class PointBlade():
         self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
 
 class Siding():
-    def __init__(self,length):
+    def __init__(self,length,startCoords):
         self.track=[]
         self.length=length
         self.connections=[-1,-1]
-        sel
+        self.startCoords=startCoords ### Not sure if I need.
 
     def add_track(self):
-        self.track.append(Track)
+        self.track.append(Track())
         self.length=self.length+1
 
     def pre_add_track(self):
@@ -86,13 +94,15 @@ class Wagon():
         self.name=name
 
 class Line():
-    def __init__(self,setup):
+    def __init__(self,setup,startCoords):
         self.line=[]
-        self.buildLine(setup)
+        self.buildLine(setup,startCoords)
 
-    def buildLine(self,setup):
+    def buildLine(self,setup,coords):
         for i in range(len(setup)):
             if setup[i]==-1:
-                self.line.append(Point)
+                self.line.append(Point(coords))#### Need to continue passing though the GUI coords.
+                coords[0]=coords[0]+32
             elif setup[i]>=1:
                 self.line.append(Siding(setup[i]))
+                coords[0]=coords[0]+setup[i]*32

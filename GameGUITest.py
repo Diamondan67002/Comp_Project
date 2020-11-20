@@ -16,11 +16,11 @@ class Game():
         width = screen.get_width()
         height = screen.get_height()
         smallfont = pygame.font.SysFont('Corbel', 25)
-        text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color)]
+        text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color),smallfont.render('Inglenook',True,color)]
         positions = [[0,470,100,30],
                      [100,470,100,30],
-                     [200,470,100,30]]### Need to move to be resizable possibly.
-        instructions=[self.map.add_track(),self.map.add_point(),]
+                     [200,470,100,30],
+                     [300,470,100,30]]### Need to move to be resizable possibly.
 
         running = True
         while running:
@@ -34,6 +34,8 @@ class Game():
                         self.map.add_point()
                     elif positions[2][0] <= mouse[0] <= positions[2][0] + positions[2][2] and positions[2][1] <= mouse[1] <= positions[2][1] + positions[2][3]:
                         running = False
+                    elif positions[3][0] <= mouse[0] <= positions[3][0] + positions[3][2] and positions[3][1] <= mouse[1] <= positions[3][1] + positions[3][3]:
+                        self.map.build_inglenook()
 
             screen.fill((255, 255, 255))
 
@@ -60,11 +62,12 @@ class Map():
         print('Hi')
 
     def build_inglenook(self):
+        startCoords=[0,0]
         setup=[[3,-1,5],
                [-1,3],
                [3]]
         for i in range(3):
-            self.map.append(Base_Classes.Line(setup[i]))
+            self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i*32]))##need to configure the y coords and the orientations
 
 game=Game()
 game.build_GUI()
