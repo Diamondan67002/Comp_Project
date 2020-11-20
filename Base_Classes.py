@@ -1,8 +1,9 @@
 import pygame
 
 class Track(pygame.sprite.Sprite):
-    images=[]
+    images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
     def __init__(self,startCoords,img):
+        print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
@@ -39,8 +40,9 @@ class Track(pygame.sprite.Sprite):
         self.image=self.images[img_num]
 
 class Point(Track):
-    images=[]
+    images=["Point-straight.png","Point-diagonal.png"]
     def __init__(self,startCoords,img):
+        print("Point Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
@@ -58,7 +60,7 @@ class Point(Track):
         self.hand=1-self.hand
 
 class PointBlade():
-    images=[]
+    images=["PointBlade-Straight.png","PointBlade-Curved.png"]
     def __init__(self):
         self.image=self.images[0]
         self.direction=0
@@ -68,6 +70,7 @@ class PointBlade():
 
 class Siding():
     def __init__(self,length,startCoords):
+        print("Siding Commenced")
         self.track=[]
         self.length=length
         self.connections=[-1,-1]
