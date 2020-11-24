@@ -2,15 +2,15 @@ import pygame
 
 class Track(pygame.sprite.Sprite):
     images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
-    def __init__(self,startCoords,img,initConnect):
+    def __init__(self,coords,img,initConnect):
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
         self.image.set_colorkey(ALPHA)###????????
         self.rect = self.image.get_rect()
-        self.rect.x = startCoords[0]
-        self.rect.y = startCoords[1]
+        self.rect.x = coords[0]*32
+        self.rect.y = coords[1]*32
 
         self.connections=[-1,-1]
         self.vehicle=''
@@ -42,15 +42,15 @@ class Track(pygame.sprite.Sprite):
 
 class Point(Track):
     images=["Point-straight.png","Point-diagonal.png"]
-    def __init__(self,startCoords,img,initConnect):
+    def __init__(self,coords,img,initConnect):
         print("Point Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
         self.image.set_colorkey(ALPHA)  ###????????
         self.rect = self.image.get_rect()
-        self.rect.x = startCoords[0]
-        self.rect.y = startCoords[1]
+        self.rect.x = coords[0]*32
+        self.rect.y = coords[1]*32
 
         ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
         self.connections=[-1,-1,-1]
@@ -79,11 +79,12 @@ class Siding():
         self.startCoords=startCoords ### Not sure if I need.
 
     def add_track(self):
-        self.track.append(Track())
+        self.track.append(Track([0,self.track[-1].],0,))
         self.length=self.length+1
 
     def pre_add_track(self):
         self.track.insert(0,Track)
+        self.length=self.length+1
 
     def buildSiding(self,length,imgNums):
         for i in range(length):
@@ -107,7 +108,7 @@ class Line():
         for i in range(len(setup)):
             if setup[i][0]==-1:
                 self.line.append(Point(coords,setup[i][1]))#### Need to continue passing though the GUI coords.
-                coords[0]=coords[0]+32
+                coords[0]=coords[0]+1
             elif setup[i][0]>=1:
                 self.line.append(Siding(setup[i],coords,setup[i][1]))
-                coords[0]=coords[0]+setup[i]*32
+                coords[0]=coords[0]+setup[i][0]
