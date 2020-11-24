@@ -80,12 +80,13 @@ class Siding():
         self.add_connection(initConnect[0],initConnect[1],initConnect[2])
         self.buildSiding(imgNums,self.coords,initConnect)
 
-    def add_track(self):
-        self.track.append(Track([0,self.track[-1].],0,))
+    def add_track(self,initConnect):
+        self.track.append(Track([self.coords[0],self.coords[1]+self.length],0,initConnect))
         self.length=self.length+1
 
-    def pre_add_track(self):
-        self.track.insert(0,Track)
+    def pre_add_track(self,initConnect):
+        self.coords[1]=self.coords[1]-1
+        self.track.insert(0,Track(self.coords,0,initConnect))
         self.length=self.length+1
 
     def buildSiding(self,imgNums,coords,initConnect):
@@ -93,7 +94,7 @@ class Siding():
             if i>0:
                 initConnect[2]=initConnect[2]+1
             self.track.append(Track(coords,imgNums[i],initConnect))### Need to set up all the alignments of x and y coords coming down from the initial map function.
-            coords[1]==coords[1]+1
+            coords[1]=coords[1]+1
 
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction]=[lineNum,posNum]
@@ -108,15 +109,17 @@ class Wagon():
         self.name=name
 
 class Line():### A Line probably going to have a fixed y value but could be altered in future.
-    def __init__(self,setup,startCoords):
+    def __init__(self,setup,startCoords,connections):
         self.line=[]
-        self.buildLine(setup,startCoords)
+        self.buildLine(setup,startCoords,connections)
 
-    def buildLine(self,setup,coords):### Actually builds and configures the line. Passing variable into Point() and Siding()
+    def buildLine(self,setup,coords,connections):### Actually builds and configures the line. Passing variable into Point() and Siding()
         for i in range(len(setup)):
             if setup[i][0]==-1:
-                self.line.append(Point(coords,setup[i][1]))#### Need to continue passing though the GUI coords.
+                self.line.append(Point(coords,setup[i][1],[0,connections[0],connections[1]]))#### Need to continue passing though the GUI coords.
                 coords[0]=coords[0]+1
+                connections[1]=connections[1]+1
             elif setup[i][0]>=1:
-                self.line.append(Siding(setup[i],coords,setup[i][1]))
+                self.line.append(Siding(setup[i][0],coords,setup[i][1],[0,connections[0],connections[1]]))### Issues. Coords and connections are effectively duplicates that should be in tegrated together.
                 coords[0]=coords[0]+setup[i][0]
+                connections[1]=connections[1]+setup[i][0]

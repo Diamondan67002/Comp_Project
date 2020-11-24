@@ -66,8 +66,11 @@ class Map():
         setup=[[[3,[0,0,0]],[-1,0],[5,[0,0,0,0,0]]],### Each row is a Line()
                [[-1,1],[3,[0,0,0]]],### Each item in a row is a Siding() or Point()
                [[3,[1,0,0]]]]### Each of these then have a list or number which shows the images used from left to right
+        connections=[[0,0,-1],
+                     [0,0,3],
+                     [0,1,0]]
         for i in range(3):### Creates each Line()
-            self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i]))##need to configure the y coords and the orientations
+            self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
 
 game = Game()
 game.build_GUI()
