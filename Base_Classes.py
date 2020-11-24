@@ -1,13 +1,14 @@
-import pygame
+import pygame, os
 
 class Track(pygame.sprite.Sprite):
-    images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
+    images=["photos\Track-Straight.png","photos\Track-Curved.png","photos\Track-Diagonal.png"]
+    colorKey=(255,255,255)
     def __init__(self,coords,img,initConnect):
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
-        self.image.set_colorkey(ALPHA)###????????
+        self.image.set_colorkey(self.colorKey)###????????
         self.rect = self.image.get_rect()
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
@@ -38,16 +39,16 @@ class Track(pygame.sprite.Sprite):
         self.curve=1-self.curve
 
     def set_image(self,img_num):### Integrated into constructor
-        self.image=self.images[img_num]
+        print("Hi")#self.image=self.images[img_num]  ## Need to resolve alterations of image.
 
 class Point(Track):
-    images=["Point-straight.png","Point-diagonal.png"]
+    images=["photos\Point-straight.png","photos\Point-diagonal.png"]
     def __init__(self,coords,img,initConnect):
         print("Point Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
-        self.image.set_colorkey(ALPHA)  ###????????
+        self.image.set_colorkey(self.colorKey)  ###????????
         self.rect = self.image.get_rect()
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
@@ -62,7 +63,7 @@ class Point(Track):
         self.hand=1-self.hand
 
 class PointBlade():### Need to add pygame.sprite.Sprite to the inheritance
-    images=["PointBlade-Straight.png","PointBlade-Curved.png"]
+    images=["photos\PointBlade-Straight.png","photos\PointBlade-Curved.png"]
     def __init__(self):
         self.image=self.images[0]
         self.direction=0
