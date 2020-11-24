@@ -61,7 +61,7 @@ class Point(Track):
     def change_hand(self):
         self.hand=1-self.hand
 
-class PointBlade():
+class PointBlade():### Need to add pygame.sprite.Sprite to the inheritance
     images=["PointBlade-Straight.png","PointBlade-Curved.png"]
     def __init__(self):
         self.image=self.images[0]
@@ -71,12 +71,14 @@ class PointBlade():
         self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
 
 class Siding():
-    def __init__(self,length,startCoords,imgNums):
+    def __init__(self,length,startCoords,imgNums,initConnect):
         print("Siding Commenced")
         self.track=[]
         self.length=length
         self.connections=[-1,-1]
-        self.startCoords=startCoords ### Not sure if I need.
+        self.coords=startCoords ### Not sure if I need.
+        self.add_connection(initConnect[0],initConnect[1],initConnect[2])
+        self.buildSiding(imgNums,self.coords,initConnect)
 
     def add_track(self):
         self.track.append(Track([0,self.track[-1].],0,))
@@ -86,9 +88,15 @@ class Siding():
         self.track.insert(0,Track)
         self.length=self.length+1
 
-    def buildSiding(self,length,imgNums):
-        for i in range(length):
-            self.track.append(Track())### Need to set up all the alignments of x and y coords coming down from the initial map function.
+    def buildSiding(self,imgNums,coords,initConnect):
+        for i in range(self.length):
+            if i>0:
+                initConnect[2]=initConnect[2]+1
+            self.track.append(Track(coords,imgNums[i],initConnect))### Need to set up all the alignments of x and y coords coming down from the initial map function.
+            coords[1]==coords[1]+1
+
+    def add_connection(self,direction,lineNum,posNum):
+        self.connections[direction]=[lineNum,posNum]
 
 class DeadEndSiding(Siding):
     def __init__(self):
@@ -99,12 +107,12 @@ class Wagon():
     def __init__(self,name):
         self.name=name
 
-class Line():
+class Line():### A Line probably going to have a fixed y value but could be altered in future.
     def __init__(self,setup,startCoords):
         self.line=[]
         self.buildLine(setup,startCoords)
 
-    def buildLine(self,setup,coords):
+    def buildLine(self,setup,coords):### Actually builds and configures the line. Passing variable into Point() and Siding()
         for i in range(len(setup)):
             if setup[i][0]==-1:
                 self.line.append(Point(coords,setup[i][1]))#### Need to continue passing though the GUI coords.

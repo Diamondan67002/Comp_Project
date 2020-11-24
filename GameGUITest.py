@@ -3,14 +3,14 @@ import Base_Classes
 
 class Game():
     def __init__(self):
-        self.map=Map()
+        self.map = Map()
 
     def build_GUI(self):
         pygame.init()
 
         screen = pygame.display.set_mode([500, 500])
 
-        color = (255, 255, 255)  ######GforG
+        color = (255, 255, 255)# #####GforG
         color_light = (170, 170, 170)
         color_dark = (100, 100, 100)
         width = screen.get_width()
@@ -52,7 +52,7 @@ class Game():
         pygame.quit()
 
 class Map():
-    map=[]
+    map = []
     def __init__(self):
         print('Hi')
 
@@ -69,5 +69,5 @@ class Map():
         for i in range(3):### Creates each Line()
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i]))##need to configure the y coords and the orientations
 
-game=Game()
+game = Game()
 game.build_GUI()
