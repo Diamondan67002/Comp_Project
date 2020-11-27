@@ -2,13 +2,13 @@ import pygame, os
 
 class Track(pygame.sprite.Sprite):
     images=["photos\Track-Straight.png","photos\Track-Curved.png","photos\Track-Diagonal.png"]
-    colorKey=(255,255,255)
+    colourKey=(255,255,255)
     def __init__(self,coords,img,initConnect):
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
-        self.image.set_colorkey(self.colorKey)###????????
+        self.image.set_colorkey(self.colourKey)###????????
         self.rect = self.image.get_rect()
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
@@ -48,24 +48,32 @@ class Point(Track):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join(self.images[img]))
         self.image.convert_alpha()
-        self.image.set_colorkey(self.colorKey)  ###????????
+        self.image.set_colorkey(self.colourKey)  ###????????
         self.rect = self.image.get_rect()
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
 
         ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
         self.connections=[-1,-1,-1]
-        self.pointBlade=PointBlade()
+        self.pointBlade=PointBlade(coords,self.colourKey)
         self.hand=0
         self.add_connection(initConnect[0],initConnect[1],initConnect[2])
 
     def change_hand(self):
         self.hand=1-self.hand
 
-class PointBlade():### Need to add pygame.sprite.Sprite to the inheritance
+class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
     images=["photos\PointBlade-Straight.png","photos\PointBlade-Curved.png"]
-    def __init__(self):
-        self.image=self.images[0]
+    def __init__(self,coords,colourkey):
+        self.colourkey=colourkey
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join(self.images[0]))
+        self.image.convert_alpha()
+        self.image.set_colorkey(self.colourkey)  ###????????
+        self.rect = self.image.get_rect()
+        self.rect.x = coords[0] * 32
+        self.rect.y = coords[1] * 32
+
         self.direction=0
 
     def changeDirection(self):
@@ -99,6 +107,9 @@ class Siding():
 
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction]=[lineNum,posNum]
+
+    def check_length(self):
+        return self.length
 
 class DeadEndSiding(Siding):
     def __init__(self):
