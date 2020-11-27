@@ -24,6 +24,8 @@ class Game():
 
         running = True
         while running:
+            mouse = pygame.mouse.get_pos()  ###GforG the correct places.
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -39,7 +41,7 @@ class Game():
 
             screen.fill((255, 255, 255))
 
-            mouse = pygame.mouse.get_pos()  ###GforG the correct places.
+
             for i in range(len(positions)):
                 if positions[i][0] <= mouse[0] <= positions[i][0] + positions[i][2] and positions[i][1] <= mouse[1] <= positions[i][1] + positions[i][3]: ### Altered from GforG
                     pygame.draw.rect(screen, color_light, [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
