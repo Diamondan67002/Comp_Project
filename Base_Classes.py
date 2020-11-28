@@ -63,7 +63,7 @@ class Point(Track):
         self.hand=1-self.hand
 
 class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
-    images=["photos\PointBlade-Straight.png","photos\PointBlade-Curved.png"]
+    images=["photos\PointBlade-Straight.png","photos\PointBlade-Curved.png"]### Might need an additional png but would alter the the changeing system unless I just rebuilt it as a 2d list.
     def __init__(self,coords,colourkey):
         self.colourkey=colourkey
         pygame.sprite.Sprite.__init__(self)
