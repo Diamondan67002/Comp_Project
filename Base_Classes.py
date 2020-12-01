@@ -3,7 +3,7 @@ import pygame, os
 class Track(pygame.sprite.Sprite):
     images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
     colourKey=(255,255,255)
-    def __init__(self,coords,img,initConnect):
+    def __init__(self,coords,img,initConnect):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(os.path.join('photos',self.images[img]))
