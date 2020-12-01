@@ -1,12 +1,12 @@
 import pygame, os
 
 class Track(pygame.sprite.Sprite):
-    images=["photos\Track-Straight.png","photos\Track-Curved.png","photos\Track-Diagonal.png"]
+    images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
     colourKey=(255,255,255)
     def __init__(self,coords,img,initConnect):
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(os.path.join(self.images[img]))
+        self.image = pygame.image.load(os.path.join('photos',self.images[img]))
         self.image.convert_alpha()
         self.image.set_colorkey(self.colourKey)###????????
         self.rect = self.image.get_rect()
@@ -41,12 +41,15 @@ class Track(pygame.sprite.Sprite):
     def set_image(self,img_num):### Integrated into constructor
         print("Hi")#self.image=self.images[img_num]  ## Need to resolve alterations of image.
 
+    def get_image(self):
+        return self.image
+
 class Point(Track):
-    images=["photos\Point-straight.png","photos\Point-diagonal.png"]
+    images=["Point-straight.png","Point-diagonal.png"]
     def __init__(self,coords,img,initConnect):
         print("Point Commenced")
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(os.path.join(self.images[img]))
+        self.image = pygame.image.load(os.path.join('photos',self.images[img]))
         self.image.convert_alpha()
         self.image.set_colorkey(self.colourKey)  ###????????
         self.rect = self.image.get_rect()
@@ -63,11 +66,11 @@ class Point(Track):
         self.hand=1-self.hand
 
 class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
-    images=["photos\PointBlade-Straight.png","photos\PointBlade-Curved.png"]### Might need an additional png but would alter the the changeing system unless I just rebuilt it as a 2d list.
+    images=["PointBlade-Straight.png","PointBlade-Curved.png"]### Might need an additional png but would alter the the changeing system unless I just rebuilt it as a 2d list.
     def __init__(self,coords,colourkey):
         self.colourkey=colourkey
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(os.path.join(self.images[0]))
+        self.image = pygame.image.load(os.path.join('photos',self.images[0]))
         self.image.convert_alpha()
         self.image.set_colorkey(self.colourkey)  ###????????
         self.rect = self.image.get_rect()
