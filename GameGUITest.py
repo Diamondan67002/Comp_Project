@@ -2,6 +2,7 @@ import pygame
 import Base_Classes
 
 class Game():
+    sprites = pygame.sprite.Group()
     def __init__(self):
         self.map = Map()
 
@@ -31,13 +32,13 @@ class Game():
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:  ###GforG
                     if positions[0][0] <= mouse[0] <= positions[0][0] + positions[0][2] and positions[0][1] <= mouse[1] <= positions[0][1] + positions[0][3]:
-                        self.map.add_track(screen)
+                        self.add_track()
                     elif positions[1][0] <= mouse[0] <= positions[1][0] + positions[1][2] and positions[1][1] <= mouse[1] <= positions[1][1] + positions[1][3]:
                         self.map.add_point()
                     elif positions[2][0] <= mouse[0] <= positions[2][0] + positions[2][2] and positions[2][1] <= mouse[1] <= positions[2][1] + positions[2][3]:
                         running = False
                     elif positions[3][0] <= mouse[0] <= positions[3][0] + positions[3][2] and positions[3][1] <= mouse[1] <= positions[3][1] + positions[3][3]:
-                        self.map.build_inglenook()
+                        self.map.build_inglenook(self.sprites)
 
             screen.fill((255, 255, 255))
 
@@ -49,9 +50,15 @@ class Game():
                     pygame.draw.rect(screen, color_dark, [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
                 screen.blit(text[i], (positions[i][0] + 20, positions[i][1]+5))
 
+            self.sprites.update()
+            self.sprites.draw(screen)
+
             pygame.display.flip()
 
         pygame.quit()
+
+    def add_track(self):
+        self.sprites.add(self.map.add_track())
 
 class Map():
     map = []
@@ -60,6 +67,9 @@ class Map():
 
     def add_track(self):
         print('Hi')
+        track=Base_Classes.Track([0,0],0,[0,-1,-1])
+        return track
+
     def add_point(self):
         print('Hi')
 
