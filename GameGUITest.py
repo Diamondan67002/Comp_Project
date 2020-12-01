@@ -38,7 +38,7 @@ class Game():
                     elif positions[2][0] <= mouse[0] <= positions[2][0] + positions[2][2] and positions[2][1] <= mouse[1] <= positions[2][1] + positions[2][3]:
                         running = False
                     elif positions[3][0] <= mouse[0] <= positions[3][0] + positions[3][2] and positions[3][1] <= mouse[1] <= positions[3][1] + positions[3][3]:
-                        self.add_list_sprites(self.map.build_inglenook())
+                        self.add_list_sprites(self.map.build_inglenook())### This was my idea bit.
 
             screen.fill((255, 255, 255))
 
