@@ -13,34 +13,37 @@ class Track(pygame.sprite.Sprite):
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
 
-        self.connections=[-1,-1]
-        self.vehicle=''
-        self.orientation=0
-        self.curve=0
+        self.connections = [-1,-1]
+        self.vehicle = ''
+        self.orientation = 0
+        self.curve = 0
         self.add_connection(initConnect[0],initConnect[1],initConnect[2])
 
     def add_connection(self,direction,lineNum,posNum):
-        self.connections[direction]=[lineNum,posNum]
+        self.connections[direction] = [lineNum,posNum]
 
     def get_connections(self):### Don't really need
         return self.connections
 
+    def get_connection(self,direction):
+        return self.connections[direction]
+
     def add_vehicle(self,vehicle):
-        self.vehicle=vehicle
+        self.vehicle = vehicle
 
     def remove_vehicle(self):
-        self.vehicle=''
+        self.vehicle = ''
 
     def check_vehicle(self):
         return self.vehicle
 
     def change_orientation(self):
-        self.orientation=1-self.orientation
+        self.orientation = 1-self.orientation
 
     def change_curve(self):
-        self.curve=1-self.curve
+        self.curve = 1-self.curve
 
-    def set_image(self,img_num):### Integrated into constructor
+    def set_image(self,img):### Integrated into constructor
         self.image = pygame.image.load(os.path.join('photos',self.images[img]))## Need to resolve alterations of image.
 
     def get_image(self):
@@ -68,13 +71,14 @@ class Point(Track):
         self.rect.y = coords[1]*32
 
         ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
-        self.connections=[-1,-1,-1]
-        self.pointBlade=PointBlade(coords,self.colourKey)
-        self.hand=0
+        self.connections = [-1,-1,-1]
+        self.vehicle = ''
+        self.pointBlade = PointBlade(coords,self.colourKey)
+        self.hand = 0
         self.add_connection(initConnect[0],initConnect[1],initConnect[2])
 
     def change_hand(self):
-        self.hand=1-self.hand
+        self.hand = 1-self.hand
 
 class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
     images=["PointBlade-Straight.png","PointBlade-Curved.png"]### Might need an additional png but would alter the the changeing system unless I just rebuilt it as a 2d list.
@@ -125,8 +129,23 @@ class Siding():
     def get_connections(self):### Don't really need
         return self.connections
 
+    def get_connection(self,direction):
+        return self.connections[direction]
+
+    def get_track_connections(self,sidingPos):
+        return self.track[sidingPos].get_connections()
+
+    def get_track_connection(self,direction,sidingPos):
+        return self.track[sidingPos].get_connection(direction)
+
     def check_length(self):
         return self.length
+
+    def get_vehicle(self,sidingPos):
+        return self.track[sidingPos].check_vehicle()
+
+    def remove_vehicle(self,sidingPos):
+        self.track[sidingPos].remove_vehicle()
 
 class DeadEndSiding(Siding):
     def __init__(self):
@@ -153,25 +172,50 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 coords[0]=coords[0]+setup[i][0]
                 connections[1]=connections[1]+setup[i][0]
 
-    def get_component_no(self,y_coord):### Can we chack what type of object an item in a list is??
-        y = 0
+    def get_component_no(self,x_coord):### Can we chack what type of object an item in a list is??
+        x = 0
         linePos = 0
         running = True
         while running:
-            if len(self.line[y].get_connections()) == 2:
-                y +=1
-            elif len(self.line[y].get_connections()) == 3:
-                y = y + self.line[y].check_length()
+            if len(self.line[x].get_connections()) == 2:
+                x +=1
+            elif len(self.line[x].get_connections()) == 3:
+                x = x + self.line[x].check_length()
 
             linePos += 1
-            if y > y_coord:
-                sidingPos = y_coord - y
+            if x > x_coord:
+                sidingPos = x_coord - x
                 point = False
                 running = False
-            elif y == y_coord:
+            elif x == x_coord:
                 running = False
                 point = True
 
         if point == True:
-            return linePos,sidingPos
-        return linePos
+            return linePos, sidingPos
+        return linePos, False
+
+    def get_vehicle(self,x_coord):## meed to re configure for when vehichle is empty. Maybe use False and then check for that before passing it back up the chain??
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            return self.line[linePos].check_vehicle()
+        return self.line[linePos].get_vehicle(sidingPos)
+
+    def remove_vehicle(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            self.line[linePos].remove_vehicle()
+        else:
+            self.line[linePos].remove_vehicle(sidingPos)
+
+    def move_vehicle(self,x_coord,direction):
+        wagon = self.get_vehicle(x_coord)
+        self.remove_vehicle(x_coord)
+        new_location = self.get_connection(x_coord,direction)
+        return wagon, new_location
+
+    def get_connection(self,x_coord,direction):
+        linePos, sidingPos = self.get_component_no(x_coord)#### Should I move these calls into the previous method as move_vehicle() is calling it a lot of times.
+        if sidingPos == False:
+            return self.line[linePos].get_connection(direction)
+        return self.line[linePos].get_track_connection(direction,sidingPos)
