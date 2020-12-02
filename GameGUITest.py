@@ -39,6 +39,8 @@ class Game():
                         running = False
                     elif positions[3][0] <= mouse[0] <= positions[3][0] + positions[3][2] and positions[3][1] <= mouse[1] <= positions[3][1] + positions[3][3]:
                         self.add_list_sprites(self.map.build_inglenook())### This was my idea bit.
+                #elif event.type == pygame.KEYDOWN:
+                #    if
 
             screen.fill((255, 255, 255))
 

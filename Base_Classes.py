@@ -17,11 +17,13 @@ class Track(pygame.sprite.Sprite):
         self.vehicle=''
         self.orientation=0
         self.curve=0
-        ##self.image=self.images[0]
         self.add_connection(initConnect[0],initConnect[1],initConnect[2])
 
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction]=[lineNum,posNum]
+
+    def get_connections(self):### Don't really need
+        return self.connections
 
     def add_vehicle(self,vehicle):
         self.vehicle=vehicle
@@ -39,10 +41,19 @@ class Track(pygame.sprite.Sprite):
         self.curve=1-self.curve
 
     def set_image(self,img_num):### Integrated into constructor
-        print("Hi")#self.image=self.images[img_num]  ## Need to resolve alterations of image.
+        self.image = pygame.image.load(os.path.join('photos',self.images[img]))## Need to resolve alterations of image.
 
     def get_image(self):
         return self.image
+
+    def move_track_point(self,coords):
+        self.rect.x = coords[0]*32
+        self.rect.y = coords[1]*32
+
+    def move_track(self,coords,connections):
+        self.move_track_point(coords)
+        for i in range(len(connections)):
+            self.add_connection(connections[i][0],connections[i][1],connections[i][2])
 
 class Point(Track):
     images=["Point-straight.png","Point-diagonal.png"]
@@ -111,6 +122,9 @@ class Siding():
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction]=[lineNum,posNum]
 
+    def get_connections(self):### Don't really need
+        return self.connections
+
     def check_length(self):
         return self.length
 
@@ -138,3 +152,26 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 self.line.append(Siding(setup[i][0],coords,setup[i][1],[0,connections[0],connections[1]]))### Issues. Coords and connections are effectively duplicates that should be in tegrated together.
                 coords[0]=coords[0]+setup[i][0]
                 connections[1]=connections[1]+setup[i][0]
+
+    def get_component_no(self,y_coord):### Can we chack what type of object an item in a list is??
+        y = 0
+        linePos = 0
+        running = True
+        while running:
+            if len(self.line[y].get_connections()) == 2:
+                y +=1
+            elif len(self.line[y].get_connections()) == 3:
+                y = y + self.line[y].check_length()
+
+            linePos += 1
+            if y > y_coord:
+                sidingPos = y_coord - y
+                point = False
+                running = False
+            elif y == y_coord:
+                running = False
+                point = True
+
+        if point == True:
+            return linePos,sidingPos
+        return linePos
