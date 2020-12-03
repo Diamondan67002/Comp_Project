@@ -17,11 +17,15 @@ class Game():
         width = screen.get_width()
         height = screen.get_height()
         smallfont = pygame.font.SysFont('Corbel', 25)
-        text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color),smallfont.render('Inglenook',True,color)]
+        text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color),smallfont.render('Inglenook',True,color),False]
         positions = [[0,470,100,30],
                      [100,470,100,30],
                      [200,470,100,30],
-                     [300,470,100,30]]### Need to move to be resizable possibly.
+                     [300,470,100,30],
+                     [0,0,32,32]]### Need to move to be resizable possibly.
+        colors = [0,0,0,0,1]
+        color_pairs = [[color_light,color_dark],
+                       [(220,200,0),(255,255,0)]]
 
         running = True
         while running:
@@ -39,20 +43,36 @@ class Game():
                         running = False
                     elif positions[3][0] <= mouse[0] <= positions[3][0] + positions[3][2] and positions[3][1] <= mouse[1] <= positions[3][1] + positions[3][3]:
                         self.add_list_sprites(self.map.build_inglenook())### This was my idea bit.
-                #elif event.type == pygame.KEYDOWN:
-                #    if
+                elif event.type == pygame.KEYDOWN:
+                    if event == pygame.K_KP8:
+                        print('Up')
+                    elif event == pygame.K_KP2:
+                        print("Down")
+                    elif event == pygame.K_KP4:
+                        print("Left")
+                    elif event == pygame.K_KP6:
+                        print("Right")
+                    elif event == pygame.K_UP:
+                        print('Up')
+                    elif event == pygame.K_DOWN:
+                        print("Down")
+                    elif event == pygame.K_LEFT:
+                        print("Left")
+                    elif event == pygame.K_RIGHT:
+                        print("Right")
 
             screen.fill((255, 255, 255))
 
 
             for i in range(len(positions)):
                 if positions[i][0] <= mouse[0] <= positions[i][0] + positions[i][2] and positions[i][1] <= mouse[1] <= positions[i][1] + positions[i][3]: ### Altered from GforG
-                    pygame.draw.rect(screen, color_light, [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
+                    pygame.draw.rect(screen, color_pairs[colors[i]][0], [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
                 else:
-                    pygame.draw.rect(screen, color_dark, [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
-                screen.blit(text[i], (positions[i][0] + 20, positions[i][1]+5))
+                    pygame.draw.rect(screen, color_pairs[colors[i]][1], [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
+                if text[i] != False:
+                    screen.blit(text[i], (positions[i][0] + 20, positions[i][1]+5))
 
-            self.sprites.update()## Code need to get the Group of sprites to update.
+            self.sprites.update()## Code needed to get the Group of sprites to update.
             self.sprites.draw(screen)
 
             pygame.display.flip()
