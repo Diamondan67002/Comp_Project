@@ -3,6 +3,13 @@ import Base_Classes
 
 class Game():
     sprites = pygame.sprite.Group()
+
+    positions = [[0, 470, 100, 30],
+                 [100, 470, 100, 30],
+                 [200, 470, 100, 30],
+                 [300, 470, 100, 30],
+                 [0, 0, 32, 32]]  ### Need to move to be resizable possibly.
+
     def __init__(self):
         self.map = Map()
 
@@ -18,12 +25,7 @@ class Game():
         height = screen.get_height()
         smallfont = pygame.font.SysFont('Corbel', 25)
         text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color),smallfont.render('Inglenook',True,color),False]
-        positions = [[0,470,100,30],
-                     [100,470,100,30],
-                     [200,470,100,30],
-                     [300,470,100,30],
-                     [0,0,32,32]]### Need to move to be resizable possibly.
-        colors = [0,0,0,0,1]
+        colors = [0,0,0,0,1]### Probably going to need to make self for all of these lists and move them out of the functions
         color_pairs = [[color_light,color_dark],
                        [(220,200,0),(255,255,0)]]
 
@@ -35,42 +37,42 @@ class Game():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:  ###GforG
-                    if positions[0][0] <= mouse[0] <= positions[0][0] + positions[0][2] and positions[0][1] <= mouse[1] <= positions[0][1] + positions[0][3]:
+                    if self.positions[0][0] <= mouse[0] <= self.positions[0][0] + self.positions[0][2] and self.positions[0][1] <= mouse[1] <= self.positions[0][1] + self.positions[0][3]:
                         self.sprites.add(self.map.add_track())
-                    elif positions[1][0] <= mouse[0] <= positions[1][0] + positions[1][2] and positions[1][1] <= mouse[1] <= positions[1][1] + positions[1][3]:
+                    elif self.positions[1][0] <= mouse[0] <= self.positions[1][0] + self.positions[1][2] and self.positions[1][1] <= mouse[1] <= self.positions[1][1] + self.positions[1][3]:
                         self.map.add_point()
-                    elif positions[2][0] <= mouse[0] <= positions[2][0] + positions[2][2] and positions[2][1] <= mouse[1] <= positions[2][1] + positions[2][3]:
+                    elif self.positions[2][0] <= mouse[0] <= self.positions[2][0] + self.positions[2][2] and self.positions[2][1] <= mouse[1] <= self.positions[2][1] + self.positions[2][3]:
                         running = False
-                    elif positions[3][0] <= mouse[0] <= positions[3][0] + positions[3][2] and positions[3][1] <= mouse[1] <= positions[3][1] + positions[3][3]:
+                    elif self.positions[3][0] <= mouse[0] <= self.positions[3][0] + self.positions[3][2] and self.positions[3][1] <= mouse[1] <= self.positions[3][1] + self.positions[3][3]:
                         self.add_list_sprites(self.map.build_inglenook())### This was my idea bit.
                 elif event.type == pygame.KEYDOWN:
-                    if event == pygame.K_KP8:
+                    if event.key == pygame.K_KP8:
                         print('Up')
-                    elif event == pygame.K_KP2:
+                    elif event.key == pygame.K_KP2:
                         print("Down")
-                    elif event == pygame.K_KP4:
+                    elif event.key == pygame.K_KP4:
                         print("Left")
-                    elif event == pygame.K_KP6:
+                    elif event.key == pygame.K_KP6:
                         print("Right")
-                    elif event == pygame.K_UP:
-                        print('Up')
-                    elif event == pygame.K_DOWN:
-                        print("Down")
-                    elif event == pygame.K_LEFT:
-                        print("Left")
-                    elif event == pygame.K_RIGHT:
-                        print("Right")
+                    elif event.key == pygame.K_UP:
+                        self.move_selector_y(-32)
+                    elif event.key == pygame.K_DOWN:
+                        self.move_selector_y(32)
+                    elif event.key == pygame.K_LEFT:
+                        self.move_selector_x(-32)
+                    elif event.key == pygame.K_RIGHT:
+                        self.move_selector_x(32)
 
             screen.fill((255, 255, 255))
 
 
-            for i in range(len(positions)):
-                if positions[i][0] <= mouse[0] <= positions[i][0] + positions[i][2] and positions[i][1] <= mouse[1] <= positions[i][1] + positions[i][3]: ### Altered from GforG
-                    pygame.draw.rect(screen, color_pairs[colors[i]][0], [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
+            for i in range(len(self.positions)):
+                if self.positions[i][0] <= mouse[0] <= self.positions[i][0] + self.positions[i][2] and self.positions[i][1] <= mouse[1] <= self.positions[i][1] + self.positions[i][3]: ### Altered from GforG
+                    pygame.draw.rect(screen, color_pairs[colors[i]][0], [self.positions[i][0],self.positions[i][1],self.positions[i][2],self.positions[i][3]])
                 else:
-                    pygame.draw.rect(screen, color_pairs[colors[i]][1], [positions[i][0],positions[i][1],positions[i][2],positions[i][3]])
+                    pygame.draw.rect(screen, color_pairs[colors[i]][1], [self.positions[i][0],self.positions[i][1],self.positions[i][2],self.positions[i][3]])
                 if text[i] != False:
-                    screen.blit(text[i], (positions[i][0] + 20, positions[i][1]+5))
+                    screen.blit(text[i], (self.positions[i][0] + 20, self.positions[i][1]+5))
 
             self.sprites.update()## Code needed to get the Group of sprites to update.
             self.sprites.draw(screen)
@@ -85,6 +87,12 @@ class Game():
     def add_list_sprites(self,sprites):
         for i in range(len(sprites)):
             self.add_sprite(sprites[i])
+
+    def move_selector_x(self,direction):
+        self.positions[4][0]=self.positions[4][0] + direction
+
+    def move_selector_y(self,direction):
+        self.positions[4][1] = self.positions[4][1] + direction
 
 class Map():
     map = []
