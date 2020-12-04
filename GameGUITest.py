@@ -88,11 +88,13 @@ class Game():
         for i in range(len(sprites)):
             self.add_sprite(sprites[i])
 
-    def move_selector_x(self,direction):
-        self.positions[4][0]=self.positions[4][0] + direction
+    def move_selector_x(self,direction):### Need to make sure it doesn't go off the edges of the screen.
+        if 0 <= self.positions[4][0] + direction <= 500:
+            self.positions[4][0]=self.positions[4][0] + direction
 
     def move_selector_y(self,direction):
-        self.positions[4][1] = self.positions[4][1] + direction
+        if 0 <= self.positions[4][1] + direction <= 500:
+            self.positions[4][1] = self.positions[4][1] + direction
 
 class Map():
     map = []
