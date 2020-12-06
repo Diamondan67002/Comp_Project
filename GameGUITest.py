@@ -131,7 +131,7 @@ class Map():
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
 
     def move_component_x(self,coords):## Would have a issue if we  had the start cooords of 0,0
-        print("Hi")
+        print(Hi)
 
     def move_component_y(self,coords):
         print("Hi")
