@@ -10,8 +10,7 @@ class Track(pygame.sprite.Sprite):
         self.image.convert_alpha()
         self.image.set_colorkey(self.colourKey)###????????
         self.rect = self.image.get_rect()
-        self.rect.x = coords[0]*32
-        self.rect.y = coords[1]*32
+        self.set_coords(coords)
 
         self.connections = [-1,-1]
         self.vehicle = ''
@@ -22,11 +21,17 @@ class Track(pygame.sprite.Sprite):
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction] = [lineNum,posNum]
 
-    def get_connections(self):### Don't really need
+    def get_connection(self):### Don't really need
         return self.connections
 
     def get_connection(self,direction):
         return self.connections[direction]
+
+    def remove_connection(self):
+        self.connections=[-1,-1]
+
+    def remove_connection(self,direction):
+        self.connections[direction] = -1
 
     def add_vehicle(self,vehicle):
         self.vehicle = vehicle
@@ -49,14 +54,18 @@ class Track(pygame.sprite.Sprite):
     def get_image(self):
         return self.image
 
-    def move_track_point(self,coords):
+    def set_coords(self,coords):
+        self.coords = coords### Don't really need but means I don't have to manipulate the values of self.rect.cx and self.rect.y
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
 
-    def move_track(self,coords,connections):
-        self.move_track_point(coords)
+    def move_track_point(self,coords,connections):
+        self.set_coords(coords)
         for i in range(len(connections)):
             self.add_connection(connections[i][0],connections[i][1],connections[i][2])
+
+    def move_track_point(self,coords):
+        self.set_coords(coords)
 
 class Point(Track):
     images=["Point-straight.png","Point-diagonal.png"]
@@ -71,6 +80,7 @@ class Point(Track):
         self.rect.y = coords[1]*32
 
         ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
+        self.coords=coords
         self.connections = [-1,-1,-1]
         self.vehicle = ''
         self.pointBlade = PointBlade(coords,self.colourKey)
@@ -116,6 +126,9 @@ class Siding():
         self.track.insert(0,Track(self.coords,0,initConnect))
         self.length=self.length+1
 
+    def remove_track(self,sidingPos):
+        self.track.remove(sidingPos)
+
     def buildSiding(self,imgNums,coords,initConnect):
         for i in range(self.length):
             if i>0:
@@ -126,13 +139,13 @@ class Siding():
     def add_connection(self,direction,lineNum,posNum):
         self.connections[direction]=[lineNum,posNum]
 
-    def get_connections(self):### Don't really need
+    def get_connection(self):### Don't really need
         return self.connections
 
     def get_connection(self,direction):
         return self.connections[direction]
 
-    def get_track_connections(self,sidingPos):
+    def get_track_connection(self,sidingPos):
         return self.track[sidingPos].get_connections()
 
     def get_track_connection(self,direction,sidingPos):
@@ -146,6 +159,9 @@ class Siding():
 
     def remove_vehicle(self,sidingPos):
         self.track[sidingPos].remove_vehicle()
+
+    def get_track(self,sidingPos):
+        return self.track[sidingPos]
 
 class DeadEndSiding(Siding):
     def __init__(self):
@@ -219,3 +235,15 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         if sidingPos == False:
             return self.line[linePos].get_connection(direction)
         return self.line[linePos].get_track_connection(direction,sidingPos)
+
+    def get_track_point(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            return self.line[linePos]
+        return self.line[linePos].get_track(sidingPos)
+
+    def remove_track_point(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            self.line.remove(linePos)
+        self.line[linePos].remove_track(sidingPos)

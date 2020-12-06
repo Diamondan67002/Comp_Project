@@ -97,9 +97,13 @@ class Game():
             self.positions[4][1] = self.positions[4][1] + direction
 
     def move_mover_x(self,direction):
+        coords = [self.positions[4][0]/32,self.positions[4][1]/32]
+        self.map.move_component_x(coords)
         self.move_selector_x(direction*32)### Converting position movement into Pixels.
 
     def move_mover_y(self,direction):
+        coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]
+        self.map.move_component_y(coords)
         self.move_selector_y(direction*32)
 
 class Map():
@@ -125,6 +129,12 @@ class Map():
                        [0,1,0]]
         for i in range(3):### Creates each Line()
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
+
+    def move_component_x(self,coords):## Would have a issue if we  had the start cooords of 0,0
+        print("Hi")
+
+    def move_component_y(self,coords):
+        print("Hi")
 
 game = Game()
 game.build_GUI()
