@@ -47,13 +47,13 @@ class Game():
                         self.add_list_sprites(self.map.build_inglenook())### This was my idea bit.
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_KP8:
-                        print('Up')
+                        self.move_mover_y(-1)
                     elif event.key == pygame.K_KP2:
-                        print("Down")
+                        self.move_mover_y(1)
                     elif event.key == pygame.K_KP4:
-                        print("Left")
+                        self.move_mover_x(-1)
                     elif event.key == pygame.K_KP6:
-                        print("Right")
+                        self.move_mover_x(1)
                     elif event.key == pygame.K_UP:
                         self.move_selector_y(-32)
                     elif event.key == pygame.K_DOWN:
@@ -95,6 +95,12 @@ class Game():
     def move_selector_y(self,direction):
         if 0 <= self.positions[4][1] + direction <= 500:
             self.positions[4][1] = self.positions[4][1] + direction
+
+    def move_mover_x(self,direction):
+        self.move_selector_x(direction*32)### Converting position movement into Pixels.
+
+    def move_mover_y(self,direction):
+        self.move_selector_y(direction*32)
 
 class Map():
     map = []
