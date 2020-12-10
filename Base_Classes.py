@@ -253,8 +253,16 @@ class Line():### A Line probably going to have a fixed y value but could be alte
     def remove_track_point(self,x_coord):### Need to sort out the connections and chnaging/deleting them.
         linePos, sidingPos = self.get_component_no(x_coord)
         if sidingPos == False:
-            self.line.remove(linePos)
-        self.line[linePos].remove_track(sidingPos)
+            self.line[linePos] = -1 ### Removes it but doesn;t delete the space it was in
+        else:
+            self.line[linePos].remove_track(sidingPos)
+
+    def delete_track_point(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            self.line.delete(x_coord)### Why isn't there a delete function
+        else:
+            self.line[linePos].delete_track(x_coord)
 
     def set_track_point_coords(self,coords):### Sets a Track()/Point()'s internal coords
         linePos, sidingPos = self.get_component_no(coords[1])

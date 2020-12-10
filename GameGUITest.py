@@ -62,6 +62,8 @@ class Game():
                         self.move_selector_x(-32)
                     elif event.key == pygame.K_RIGHT:
                         self.move_selector_x(32)
+                    elif event.key == pygame.K_p:
+                        self.place_pickup_component()
 
             screen.fill((255, 255, 255))
 
@@ -101,13 +103,17 @@ class Game():
         self.map.move_component_x(coords)
         self.move_selector_x(direction*32)### Converting position movement into Pixels.
 
-    def move_mover_y(self,direction):### Moves the mover and slector and therefore a component where the selector is in the y direction
-        coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]
+    def move_mover_y(self,direction):### Moves the mover and selector and therefore a component where the selector is in the y direction
+        coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]### Maybe make coords the new coords??
         self.map.move_component_y(coords)
         self.move_selector_y(direction*32)
 
+    def place_pickup_component(self):
+        self.map.place_pickup_component([self.positions[4][0] / 32, self.positions[4][1] / 32])
+
 class Map():
     map = []
+    component = -1
     def __init__(self):
         print('Hi')
 
@@ -133,7 +139,19 @@ class Map():
     def move_component_x(self,coords):## Would have a issue if we  had the start cooords of 0,0
         print("Hi")
 
-    def move_component_y(self,coords):
+    def move_component_y(self,coords):### Will have issues if there is already a component at a certain position
+        print("Hi")
+
+    def place_pickup_component(self,coords):
+        if self.component == -1:
+            self.pickup_component(coords)
+        else:
+            self.place_component(coords)
+
+    def pickup_component(self,coords):
+        self.component = self.map[coords[1]].get_track_point(coords[0])
+
+    def place_component(self,coords):
         print("Hi")
 
 game = Game()
