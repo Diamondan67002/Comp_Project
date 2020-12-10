@@ -150,8 +150,13 @@ class Map():
 
     def pickup_component(self,coords):
         self.component = self.map[coords[1]].get_track_point(coords[0])
+        self.map[coords[1]].remove_track_point(coords[0])
+        self.reconfigure_connections(self.component.get_connection())
 
     def place_component(self,coords):
+        print("Hi")
+
+    def reconfigure_connections(self,connections):
         print("Hi")
 
 game = Game()

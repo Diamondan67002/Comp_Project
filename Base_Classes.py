@@ -54,6 +54,9 @@ class Track(pygame.sprite.Sprite):
     def get_image(self):
         return self.image
 
+    def get_coords(self):
+        return self.coords
+
     def set_coords(self,coords):
         self.coords = coords### Don't really need but means I don't have to manipulate the values of self.rect.cx and self.rect.y
         self.rect.x = coords[0]*32
@@ -132,7 +135,7 @@ class Siding():
         self.length=self.length+1
 
     def remove_track(self,sidingPos):### Removes a track but need to write the algoritmn that goes and reconfigure both the connections and all the coordinates.
-        self.track.remove(sidingPos)### There is quite a few possibilities there though.
+        self.track[sidingPos] = -1 ### There is quite a few possibilities there though.
 
     def buildSiding(self,imgNums,coords,initConnect):### Ran upon initiation
         for i in range(self.length):
@@ -168,8 +171,14 @@ class Siding():
     def get_track(self,sidingPos):
         return self.track[sidingPos]
 
+    def pop_track(self,sidingPos):
+        return self.track.pop(sidingPos)
+
     def set_track_coords(self,coords,sidingPos):
         self.track[sidingPos].set_coords(coords)
+
+    def reconfigure_conections_pop(self,sidingPos):
+        print("Hi")
 
 class DeadEndSiding(Siding):### Don't think it will every actually be used.
     def __init__(self):
@@ -200,6 +209,8 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         x = 0 ### This converts a normal x_coord into a linePos and sidingPos where if it is a Point sidingPos = False
         linePos = 0
         running = True
+        point = False
+        sidingPos = False
         while running:### Goes and iterates though until the x reaches or is greater than x_coord
             if len(self.line[x].get_connections()) == 3:### Had these 2 the wrong way around
                 x +=1
@@ -250,6 +261,12 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             return self.line[linePos]
         return self.line[linePos].get_track(sidingPos)
 
+    def pop_track_point(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            return self.line.pop(linePos)
+        return self.line[linePos].pop_track(sidingPos)
+
     def remove_track_point(self,x_coord):### Need to sort out the connections and chnaging/deleting them.
         linePos, sidingPos = self.get_component_no(x_coord)
         if sidingPos == False:
@@ -257,16 +274,12 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         else:
             self.line[linePos].remove_track(sidingPos)
 
-    def delete_track_point(self,x_coord):
-        linePos, sidingPos = self.get_component_no(x_coord)
-        if sidingPos == False:
-            self.line.delete(x_coord)### Why isn't there a delete function
-        else:
-            self.line[linePos].delete_track(x_coord)
-
     def set_track_point_coords(self,coords):### Sets a Track()/Point()'s internal coords
         linePos, sidingPos = self.get_component_no(coords[1])
         if sidingPos == False:
             self.line[linePos].set_coords(coords)
         else:
             self.line[linePos].set_track_coords(coords,sidingPos)
+
+    def reconfigure_connections(self,x_coord):
+        print("Hi")
