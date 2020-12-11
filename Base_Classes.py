@@ -220,15 +220,18 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             linePos += 1
             if x > x_coord:
                 sidingPos = x_coord - x
-                point = False
                 running = False
             elif x == x_coord:
                 running = False
                 point = True
 
+            if linePos > len(self.line):
+                running = False
+                sidingPos = False
+
         if point == True:
-            return linePos, sidingPos
-        return linePos, False
+            return linePos, False
+        return linePos, sidingPos
 
     def get_vehicle(self,x_coord):## meed to re configure for when vehichle is empty. Maybe use False and then check for that before passing it back up the chain??
         linePos, sidingPos = self.get_component_no(x_coord)
@@ -280,6 +283,18 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             self.line[linePos].set_coords(coords)
         else:
             self.line[linePos].set_track_coords(coords,sidingPos)
+
+    def place_track_point(self,coords,component):
+        linePos, sidingPos = self.get_component_no(coords[1])
+        if sidingPos == False:
+            print("Hi")
+
+    def check_track_point(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if linePos > len(self.line):
+            print("This position doesn't currently exist in the map")
+            return False
+        return True
 
     def reconfigure_connections(self,x_coord):
         print("Hi")
