@@ -154,7 +154,10 @@ class Map():
         self.reconfigure_connections(self.component.get_connection())
 
     def place_component(self,coords):
-        print("Hi")
+        if self.map[coords[1]].check_track_point(coords[0]) ==True:
+            self.map[coords[1]].place_track_point(coords)
+        else:
+            print("This space is already occupied by another comonent")
 
     def reconfigure_connections(self,connections):
         print("Hi")
