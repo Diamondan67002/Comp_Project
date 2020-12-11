@@ -284,7 +284,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         else:
             self.line[linePos].set_track_coords(coords,sidingPos)
 
-    def place_track_point(self,coords,component):
+    def place_track_point(self,coords,component,check):
         linePos, sidingPos = self.get_component_no(coords[1])
         if sidingPos == False:
             print("Hi")
