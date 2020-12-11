@@ -159,6 +159,9 @@ class Map():
         else:
             print("This space is already occupied by another comonent")
 
+    def place_component_2(self,coords):
+        self.map[coords[1]].place_track_point(coords,self.component)
+
     def reconfigure_connections(self,connections):
         print("Hi")
 
