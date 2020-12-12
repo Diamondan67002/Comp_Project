@@ -196,9 +196,12 @@ class Siding():
         if 0 < sidingPos < self.check_length() - 1:### Need this for all of them.
             direction = self.track[sidingPos].get_connection_direction(connection)
             self.track[sidingPos].remove_connection(direction)
-        elif sidingPos == 0 or sidingPos == self.check_length() - 1:
-            direction = self.get_connection_direction(connection)
-            self.set_connection(direction,-1)
+        elif sidingPos == 0:
+            self.set_connection(0,-1)
+            direction = self.track[sidingPos].get_connection_direction(connection)
+            self.track[sidingPos].remove_connection(direction)
+        elif sidingPos == self.check_length() - 1:
+            self.set_connection(1,-1)
             direction = self.track[sidingPos].get_connection_direction(connection)
             self.track[sidingPos].remove_connection(direction)
 
@@ -321,7 +324,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
     def reconfigure_connections(self,x_coord):### reconfigures connections for popped objects was the intention
         print("Hi")
 
-    def delete_conection(self,x_coord,coords_connection):
+    def delete_conection(self,x_coord,coords_connection):### Deletes a connection of a component that has been removed.
         linePos, sidingPos = self.get_component_no(x_coord)
         if sidingPos == False:
             direction = self.line[linePos].get_connection_direction(coords_connection)
