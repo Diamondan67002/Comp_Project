@@ -16,9 +16,9 @@ class Track(pygame.sprite.Sprite):
         self.vehicle = ''
         self.orientation = 0
         self.curve = 0
-        self.add_connection(initConnect[0],initConnect[1],initConnect[2])
+        self.set_connection(initConnect[0],initConnect[1],initConnect[2])
 
-    def add_connection(self,direction,lineNum,posNum):
+    def set_connection(self,direction,lineNum,posNum):### Could change to rationalise it and all the remove connection functions
         self.connections[direction] = [lineNum,posNum]
 
     def get_connection(self):### Don't really need
@@ -32,6 +32,12 @@ class Track(pygame.sprite.Sprite):
 
     def remove_connection(self,direction):
         self.connections[direction] = -1
+
+    def get_connection_direction(self,connection):
+        connections = self.get_connection()
+        for i in range(len(connections)):
+            if connections[i][0] == connection[0] and connections[i][1] == connection[1]:
+                return i
 
     def add_vehicle(self,vehicle):
         self.vehicle = vehicle
@@ -122,7 +128,7 @@ class Siding():
         self.length=length
         self.connections=[-1,-1]
         self.coords=startCoords ### Not sure if I need.
-        self.add_connection(initConnect[0],initConnect[1],initConnect[2])
+        self.set_connection(initConnect[0],[initConnect[1],initConnect[2]])
         self.buildSiding(imgNums,self.coords,initConnect)
 
     def add_track(self,initConnect):### Appends a track object to the end of the list
@@ -144,14 +150,20 @@ class Siding():
             self.track.append(Track(coords,imgNums[i],initConnect))### Need to set up all the alignments of x and y coords coming down from the initial map function.
             coords[1]=coords[1]+1
 
-    def add_connection(self,direction,lineNum,posNum):
-        self.connections[direction]=[lineNum,posNum]
+    def set_connection(self,direction,connection):
+        self.connections[direction] = connection
 
     def get_connection(self):### Don't really need
         return self.connections
 
     def get_connection(self,direction):
         return self.connections[direction]
+
+    def get_connection_direction(self,connection):
+        connections = self.get_connection()
+        for i in range(len(connections)):
+            if connections[i][0] == connection[0] and connections[i][1] == connection[1]:
+                return i
 
     def get_track_connection(self,sidingPos):### Again duplication for different arguments
         return self.track[sidingPos].get_connections()
@@ -179,6 +191,16 @@ class Siding():
 
     def reconfigure_conections_pop(self,sidingPos):
         print("Hi")
+
+    def delete_connection(self,sidingPos,connection):
+        if 0 < sidingPos < self.check_length() - 1:### Need this for all of them.
+            direction = self.track[sidingPos].get_connection_direction(connection)
+            self.track[sidingPos].remove_connection(direction)
+        elif sidingPos == 0 or sidingPos == self.check_length() - 1:
+            direction = self.get_connection_direction(connection)
+            self.set_connection(direction,-1)
+            direction = self.track[sidingPos].get_connection_direction(connection)
+            self.track[sidingPos].remove_connection(direction)
 
 class DeadEndSiding(Siding):### Don't think it will every actually be used.
     def __init__(self):
@@ -296,5 +318,13 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             return False
         return True
 
-    def reconfigure_connections(self,x_coord):
+    def reconfigure_connections(self,x_coord):### reconfigures connections for popped objects was the intention
         print("Hi")
+
+    def delete_conection(self,x_coord,coords_connection):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            direction = self.line[linePos].get_connection_direction(coords_connection)
+            self.line[linePos].remove_connection(direction)
+        else:
+            self.line[linePos].delete_connection(sidingPos,coords_connection)
