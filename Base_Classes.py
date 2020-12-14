@@ -3,10 +3,10 @@ import pygame, os
 class Track(pygame.sprite.Sprite):
     images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
     colourKey=(255,255,255)
-    curved_track_rotations = [[],### The  Rotation and reflections to get from the identity curved track image to the one
-                              [],### with a angle of 45 degrees to 180 as over 180 is the same but rotated 180 degrees to
-                              [],### start with.
-                              []]
+    curved_track_rotations = [[False,False,0],### The  Rotation and reflections to get from the identity curved track image to the one
+                              [False,True,90],### with a angle of 45 degrees to 180 as over 180 is the same but rotated 180 degrees to
+                              [False,False,90],### start with.
+                              [True,False,0]]
 
     def __init__(self,coords,img,initConnect):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
         print("Track Commenced")
@@ -90,11 +90,11 @@ class Track(pygame.sprite.Sprite):
             orientation = self.orientation
             self.set_image(1)### reseting the image to make sure we have the original quality image.
             if self.orientation > 180:### Hopefully the mod function works for keeping the orientation value below 360 deg
-                self.rotate_image(180)
+                self.rotate_image(180)### Could change to reflect in both x & y which would give a better quality image due to non-desctructivity.
                 orientation = orientation - 180
             index = orientation / 45
-            self.reflect_image(self.curved_track_rotations[i][0],self.curved_track_rotations[i][1])
-            self.rotate_image(self.curved_track_rotations[i][2])
+            self.reflect_image(self.curved_track_rotations[index][0],self.curved_track_rotations[index][1])
+            self.rotate_image(self.curved_track_rotations[index][2])
 
 
     def get_coords(self):
