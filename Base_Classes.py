@@ -11,6 +11,7 @@ class Track(pygame.sprite.Sprite):
         self.image.set_colorkey(self.colourKey)###????????
         self.rect = self.image.get_rect()
         self.set_coords(coords)
+        self.imgNum = img
 
         self.connections = [-1,-1]
         self.vehicle = ''
@@ -48,17 +49,36 @@ class Track(pygame.sprite.Sprite):
     def check_vehicle(self):
         return self.vehicle
 
-    def change_orientation(self):### Using a number to represent true false given it is really neat and clean to change
-        self.orientation = 1-self.orientation
+    #def change_orientation(self):### Using a number to represent true false given it is really neat and clean to change
+    #    self.orientation = 1-self.orientation### Not 100% sure what I was using orientation for before.
 
     def change_curve(self):
         self.curve = 1-self.curve
 
     def set_image(self,img):### Integrated into constructor. But allows changing of images
         self.image = pygame.image.load(os.path.join('photos',self.images[img]))## Need to resolve alterations of image.
+        self.imgNum = img
 
     def get_image(self):
         return self.image
+
+    def get_image_num(self):
+        return self.imgNum
+
+    def rotate_image(self,angle):
+        pygame.transform.rotate(self.image,angle)
+
+    def track_image_rotator(self,direction):
+        self.orientation = (self.orientation + direction * 45) % 360
+        if self.get_image_num() == 0:
+            self.set_image(2)
+            self.rotate_image(self.orientation-45)
+        elif self.get_image_num() == 2:
+            self.set_image(0)
+            self.rotate_image(self.orientation)
+        elif self.get_image_num() == 1:
+            self.set_image(1)### reseting the image to make sure we have the original quality image.
+
 
     def get_coords(self):
         return self.coords
@@ -89,6 +109,7 @@ class Point(Track):
         self.rect = self.image.get_rect()
         self.rect.x = coords[0]*32
         self.rect.y = coords[1]*32
+        self.imgNum = img
 
         ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
         self.coords=coords
