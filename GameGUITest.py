@@ -38,13 +38,13 @@ class Game():
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:  ###GforG ### CHecks for presses of the GUI buttons
                     if self.positions[0][0] <= mouse[0] <= self.positions[0][0] + self.positions[0][2] and self.positions[0][1] <= mouse[1] <= self.positions[0][1] + self.positions[0][3]:
-                        self.sprites.add(self.map.add_track())
+                        self.map.add_track()
                     elif self.positions[1][0] <= mouse[0] <= self.positions[1][0] + self.positions[1][2] and self.positions[1][1] <= mouse[1] <= self.positions[1][1] + self.positions[1][3]:
                         self.map.add_point()
                     elif self.positions[2][0] <= mouse[0] <= self.positions[2][0] + self.positions[2][2] and self.positions[2][1] <= mouse[1] <= self.positions[2][1] + self.positions[2][3]:
                         running = False
                     elif self.positions[3][0] <= mouse[0] <= self.positions[3][0] + self.positions[3][2] and self.positions[3][1] <= mouse[1] <= self.positions[3][1] + self.positions[3][3]:
-                        self.add_list_sprites(self.map.build_inglenook())### This was my idea bit.
+                        self.map.build_inglenook()### This was my idea bit.
                 elif event.type == pygame.KEYDOWN:### Checks though all the key operations
                     if event.key == pygame.K_KP8:
                         self.move_mover_y(-1)
@@ -76,19 +76,13 @@ class Game():
                 if text[i] != False:
                     screen.blit(text[i], (self.positions[i][0] + 20, self.positions[i][1]+5))
 
-            self.sprites.update()## Code needed to get the Group of sprites to update.
-            self.sprites.draw(screen)
+            sprites = self.map.update_map()
+            sprites.update()## Code needed to get the Group of sprites to update. ### Don't need now as map updates the sprites and then returns them.
+            sprites.draw(screen)
 
             pygame.display.flip()
 
         pygame.quit()
-
-    def add_sprite(self,sprite):### Probably don't need.
-        self.sprites.add(sprite)
-
-    def add_list_sprites(self,sprites):### Adds all the objects in a list to a group
-        for i in range(len(sprites)):
-            self.add_sprite(sprites[i])
 
     def move_selector_x(self,direction):### Need to make sure it doesn't go off the edges of the screen. Fixed
         if 0 <= self.positions[4][0] + direction <= 500:### Moves the selector in the x direction
@@ -114,13 +108,12 @@ class Game():
 class Map():
     map = []
     component = -1
+    sprites = pygame.sprite.Group()
     def __init__(self):
         print('Hi')
 
     def add_track(self):### need to change to add to map
-        print('Hi')
         track=Base_Classes.Track([0,0],0,[0,-1,-1])
-        return track
 
     def add_point(self):
         print('Hi')
@@ -161,5 +154,15 @@ class Map():
         for i in range(len(connections)):
             self.map[coords[1]].delete_connection(connections[i][0],coords)
 
+    def update_map(self):### MOved all the dealing with the sprite group into Map as it actually has the map of sprites
+        self.sprites.update()
+        return self.sprites
+
+    def add_sprite(self,sprite):### Probably don't need.
+        self.sprites.add(sprite)
+
+    def add_list_sprites(self,sprites):### Adds all the objects in a list to a group
+        for i in range(len(sprites)):
+            self.add_sprite(sprites[i])
 game = Game()
 game.build_GUI()
