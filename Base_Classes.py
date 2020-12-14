@@ -3,6 +3,11 @@ import pygame, os
 class Track(pygame.sprite.Sprite):
     images=["Track-Straight.png","Track-Curved.png","Track-Diagonal.png"]
     colourKey=(255,255,255)
+    curved_track_rotations = [[],### The  Rotation and reflections to get from the identity curved track image to the one
+                              [],### with a angle of 45 degrees to 180 as over 180 is the same but rotated 180 degrees to
+                              [],### start with.
+                              []]
+
     def __init__(self,coords,img,initConnect):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
         print("Track Commenced")
         pygame.sprite.Sprite.__init__(self)### Initiates the Sprite class
@@ -68,8 +73,13 @@ class Track(pygame.sprite.Sprite):
     def rotate_image(self,angle):
         pygame.transform.rotate(self.image,angle)
 
+    def reflect_image(self,x_bool,y_bool):
+        pygame.transform.flip(self.image,x_bool,y_bool)
+
     def track_image_rotator(self,direction):
         self.orientation = (self.orientation + direction * 45) % 360
+        if self.orientation < 0:### Shouldn't need.
+            self.orientation = self.orientation + 360
         if self.get_image_num() == 0:
             self.set_image(2)
             self.rotate_image(self.orientation-45)
@@ -77,7 +87,14 @@ class Track(pygame.sprite.Sprite):
             self.set_image(0)
             self.rotate_image(self.orientation)
         elif self.get_image_num() == 1:
+            orientation = self.orientation
             self.set_image(1)### reseting the image to make sure we have the original quality image.
+            if self.orientation > 180:### Hopefully the mod function works for keeping the orientation value below 360 deg
+                self.rotate_image(180)
+                orientation = orientation - 180
+            index = orientation / 45
+            self.reflect_image(self.curved_track_rotations[i][0],self.curved_track_rotations[i][1])
+            self.rotate_image(self.curved_track_rotations[i][2])
 
 
     def get_coords(self):

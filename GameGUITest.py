@@ -64,6 +64,10 @@ class Game():
                         self.move_selector_x(32)
                     elif event.key == pygame.K_p:
                         self.place_pickup_component()
+                    elif event.key == pygame.K_e:
+                        print("Rotate Clockwise")
+                    elif event.key == pygame.K_q:
+                        print("Rotate Anti-Clockwise")
 
             screen.fill((255, 255, 255))
 
@@ -114,6 +118,9 @@ class Map():
 
     def add_track(self):### need to change to add to map
         track=Base_Classes.Track([0,0],0,[0,-1,-1])
+        self.add_sprite(track)
+        self.component = track
+        self.place_component()
 
     def add_point(self):
         print('Hi')
