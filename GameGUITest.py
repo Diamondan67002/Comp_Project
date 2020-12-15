@@ -38,7 +38,7 @@ class Game():
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:  ###GforG ### CHecks for presses of the GUI buttons
                     if self.positions[0][0] <= mouse[0] <= self.positions[0][0] + self.positions[0][2] and self.positions[0][1] <= mouse[1] <= self.positions[0][1] + self.positions[0][3]:
-                        self.map.add_track()
+                        self.map.add_track([self.positions[4][0] / 32, self.positions[4][1] / 32])
                     elif self.positions[1][0] <= mouse[0] <= self.positions[1][0] + self.positions[1][2] and self.positions[1][1] <= mouse[1] <= self.positions[1][1] + self.positions[1][3]:
                         self.map.add_point()
                     elif self.positions[2][0] <= mouse[0] <= self.positions[2][0] + self.positions[2][2] and self.positions[2][1] <= mouse[1] <= self.positions[2][1] + self.positions[2][3]:
@@ -120,11 +120,11 @@ class Map():
     def __init__(self):
         print('Hi')
 
-    def add_track(self):### need to change to add to map
+    def add_track(self,coords):### need to change to add to map
         track=Base_Classes.Track([0,0],0,[0,-1,-1])
         self.add_sprite(track)
         self.component = track
-        self.place_component()
+        self.place_component(coords)
 
     def add_point(self):
         print('Hi')

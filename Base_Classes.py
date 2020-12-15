@@ -347,12 +347,12 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         else:
             self.line[linePos].set_track_coords(coords,sidingPos)
 
-    def place_track_point(self,coords,component,check):
+    def place_track_point(self,coords,component,check):### Not complete yet.
         linePos, sidingPos = self.get_component_no(coords[1])
         if sidingPos == False:
             print("Hi")
 
-    def check_track_point(self,x_coord):
+    def check_track_point(self,x_coord):### Check if that place already exist.
         linePos, sidingPos = self.get_component_no(x_coord)
         if linePos > len(self.line):
             print("This position doesn't currently exist in the map")
