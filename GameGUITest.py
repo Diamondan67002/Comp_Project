@@ -121,12 +121,16 @@ class Map():
         print('Hi')
 
     def add_track(self,coords):### need to change to add to map
-        track=Base_Classes.Track([0,0],0,[0,-1,-1])
+        track = Base_Classes.Track([0,0],0)
         self.add_sprite(track)
         self.component = track
         self.place_component(coords)
 
-    def add_point(self):
+    def add_point(self,coords):
+        point = Base_Classes.Point([0,0],0)
+        self.add_sprite(point)
+        self.component = point
+        self.place_component(coords)
         print('Hi')
 
     def build_inglenook(self):

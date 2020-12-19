@@ -22,7 +22,22 @@ class Track(pygame.sprite.Sprite):
         self.vehicle = ''
         self.orientation = 0
         self.curve = 0
-        self.set_connection(initConnect[0],initConnect[1],initConnect[2])
+        self.set_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally so I don't have to overload the initiators
+
+    def __init__(self,coords,img):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
+        print("Track Commenced")
+        pygame.sprite.Sprite.__init__(self)### Initiates the Sprite class
+        self.image = pygame.image.load(os.path.join('photos',self.images[img]))### Sets the Image for the Track
+        self.image.convert_alpha()
+        self.image.set_colorkey(self.colourKey)###????????
+        self.rect = self.image.get_rect()
+        self.set_coords(coords)
+        self.imgNum = img
+
+        self.connections = [-1,-1]
+        self.vehicle = ''
+        self.orientation = 0
+        self.curve = 0
 
     def set_connection(self,direction,lineNum,posNum):### Could change to rationalise it and all the remove connection functions
         self.connections[direction] = [lineNum,posNum]
@@ -134,7 +149,25 @@ class Point(Track):
         self.vehicle = ''
         self.pointBlade = PointBlade(coords,self.colourKey)### Creating the point Blade to be put over the point
         self.hand = 0
-        self.add_connection(initConnect[0],initConnect[1],initConnect[2])
+        self.add_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally from the initiator.
+
+    def __init__(self,coords,img):
+        print("Point Commenced")
+        pygame.sprite.Sprite.__init__(self)### Same as track
+        self.image = pygame.image.load(os.path.join('photos',self.images[img]))
+        self.image.convert_alpha()
+        self.image.set_colorkey(self.colourKey)  ###????????
+        self.rect = self.image.get_rect()
+        self.rect.x = coords[0]*32
+        self.rect.y = coords[1]*32
+        self.imgNum = img
+
+        ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
+        self.coords=coords
+        self.connections = [-1,-1,-1]
+        self.vehicle = ''
+        self.pointBlade = PointBlade(coords,self.colourKey)### Creating the point Blade to be put over the point
+        self.hand = 0
 
     def change_hand(self):
         self.hand = 1-self.hand
@@ -255,6 +288,7 @@ class Wagon():
 class Line():### A Line probably going to have a fixed y value but could be altered in future.
     def __init__(self,setup,startCoords,connections):
         self.line=[]
+        self.startCoords = startCoords
         self.buildLine(setup,startCoords,connections)
 
     def buildLine(self,setup,coords,connections):### Actually builds and configures the line. Passing variable into Point() and Siding()
