@@ -120,17 +120,19 @@ class Map():
     def __init__(self):
         print('Hi')
 
-    def add_track(self,coords):### need to change to add to map
-        track = Base_Classes.Track([0,0],0)
-        self.add_sprite(track)
-        self.component = track
-        self.place_component(coords)
+    def add_track(self,coords):
+        if self.component == -1:
+            track = Base_Classes.Track([0,0],0)
+            self.add_sprite(track)
+            self.component = track
+            self.place_component(coords)
 
     def add_point(self,coords):
-        point = Base_Classes.Point([0,0],0)
-        self.add_sprite(point)
-        self.component = point
-        self.place_component(coords)
+        if self.component == -1:### Tbh It probably doesn't matter if you were to delete a component. They are easy to make.
+            point = Base_Classes.Point([0,0],0)
+            self.add_sprite(point)
+            self.component = point
+            self.place_component(coords)
         print('Hi')
 
     def build_inglenook(self):
@@ -143,6 +145,7 @@ class Map():
                        [0,1,0]]
         for i in range(3):### Creates each Line()
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
+        self.get_sprites()
 
     def move_component_x(self,coords):## Would have a issue if we  had the start cooords of 0,0
         print("Hi")
@@ -183,5 +186,11 @@ class Map():
     def add_list_sprites(self,sprites):### Adds all the objects in a list to a group
         for i in range(len(sprites)):
             self.add_sprite(sprites[i])
+
+    def get_sprites(self):### Gets the sprites already in a map. Useful for loading maps like building the inglenook.
+        for i in range(len(self.map)):
+            sprite_list = self.map[i].get_sprites()
+            self.add_list_sprites(sprite_list)
+
 game = Game()
 game.build_GUI()

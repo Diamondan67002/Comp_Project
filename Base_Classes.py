@@ -214,6 +214,9 @@ class Siding():
     def remove_track(self,sidingPos):### Removes a track but need to write the algoritmn that goes and reconfigure both the connections and all the coordinates.
         self.track[sidingPos] = -1 ### There is quite a few possibilities there though.
 
+    def get_track(self):### For the setting up of the sprite group.
+        return self.track
+
     def buildSiding(self,imgNums,coords,initConnect):### Ran upon initiation
         for i in range(self.length):
             if i>0:
@@ -309,10 +312,10 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         point = False
         sidingPos = False
         while running:### Goes and iterates though until the x reaches or is greater than x_coord
-            if len(self.line[x].get_connections()) == 3:### Had these 2 the wrong way around
+            if len(self.line[linePos].get_connections()) == 3:### Had these 2 the wrong way around
                 x +=1
-            elif len(self.line[x].get_connections()) == 2:
-                x = x + self.line[x].check_length()
+            elif len(self.line[linePos].get_connections()) == 2:### Was also using x instead of linePos.
+                x = x + self.line[linePos].check_length()
 
             linePos += 1
             if x > x_coord:
@@ -403,3 +406,20 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             self.line[linePos].remove_connection(direction)
         else:
             self.line[linePos].delete_connection(sidingPos,coords_connection)
+
+    def get_sprites(self):
+        sprites = []
+        for i in range(len(self.line)):
+            if self.line[i] != -1 and len(self.line[i].get_connections()) == 3:### Just for issues where you have removed components
+                sprites.append(self.line[i])
+            elif self.line[i] != -1 and len(self.line[i].get_connections()) == 2:
+                siding_sprites = self.line[i].get_track()
+                sprites = self.add_sprites(sprites,siding_sprites)
+        return sprites
+
+
+    def add_sprites(self,sprites,sprite_list):
+        for i in range(len(sprite_list)):
+            if sprite_list[i] != -1:### Won't need if there is never any -1's in Line or siding
+                sprites.append(sprite_list[i])
+        return sprites
