@@ -8,21 +8,21 @@ class Track(pygame.sprite.Sprite):
                               [False,False,90],### start with.
                               [True,False,0]]
 
-    def __init__(self,coords,img,initConnect):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
-        print("Track Commenced")
-        pygame.sprite.Sprite.__init__(self)### Initiates the Sprite class
-        self.image = pygame.image.load(os.path.join('photos',self.images[img]))### Sets the Image for the Track
-        self.image.convert_alpha()
-        self.image.set_colorkey(self.colourKey)###????????
-        self.rect = self.image.get_rect()
-        self.set_coords(coords)
-        self.imgNum = img
+    #def __init__(self,coords,img,initConnect):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
+        #print("Track Commenced")
+        #pygame.sprite.Sprite.__init__(self)### Initiates the Sprite class
+        #self.image = pygame.image.load(os.path.join('photos',self.images[img]))### Sets the Image for the Track
+        #self.image.convert_alpha()
+        #self.image.set_colorkey(self.colourKey)###????????
+        #self.rect = self.image.get_rect()
+        #self.set_coords(coords)
+        #self.imgNum = img
 
-        self.connections = [-1,-1]
-        self.vehicle = ''
-        self.orientation = 0
-        self.curve = 0
-        self.set_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally so I don't have to overload the initiators
+        #self.connections = [-1,-1]
+        #self.vehicle = ''
+        #self.orientation = 0
+        #self.curve = 0
+        #self.set_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally so I don't have to overload the initiators
 
     def __init__(self,coords,img):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
         print("Track Commenced")
@@ -132,24 +132,24 @@ class Track(pygame.sprite.Sprite):
 
 class Point(Track):
     images=["Point-straight.png","Point-diagonal.png"]
-    def __init__(self,coords,img,initConnect):
-        print("Point Commenced")
-        pygame.sprite.Sprite.__init__(self)### Same as track
-        self.image = pygame.image.load(os.path.join('photos',self.images[img]))
-        self.image.convert_alpha()
-        self.image.set_colorkey(self.colourKey)  ###????????
-        self.rect = self.image.get_rect()
-        self.rect.x = coords[0]*32
-        self.rect.y = coords[1]*32
-        self.imgNum = img
+    #def __init__(self,coords,img,initConnect):
+        #print("Point Commenced")
+        #pygame.sprite.Sprite.__init__(self)### Same as track
+        #self.image = pygame.image.load(os.path.join('photos',self.images[img]))
+        #self.image.convert_alpha()
+        #self.image.set_colorkey(self.colourKey)  ###????????
+        #self.rect = self.image.get_rect()
+        #self.rect.x = coords[0]*32
+        #self.rect.y = coords[1]*32
+        #self.imgNum = img
 
         ###???????????????????? You need to call the parent constructor (Track.__init__()  ) explicitly IF you wish to use it....
-        self.coords=coords
-        self.connections = [-1,-1,-1]
-        self.vehicle = ''
-        self.pointBlade = PointBlade(coords,self.colourKey)### Creating the point Blade to be put over the point
-        self.hand = 0
-        self.add_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally from the initiator.
+        #self.coords=coords
+        #self.connections = [-1,-1,-1]
+        #self.vehicle = ''
+        #self.pointBlade = PointBlade(coords,self.colourKey)### Creating the point Blade to be put over the point
+        #self.hand = 0
+        #self.set_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally from the initiator.
 
     def __init__(self,coords,img):
         print("Point Commenced")
@@ -221,7 +221,8 @@ class Siding():
         for i in range(self.length):
             if i>0:
                 initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
-            self.track.append(Track(coords,imgNums[i],initConnect))### Need to set up all the alignments of x and y coords coming down from the initial map function.
+            self.track.append(Track(coords,imgNums[i]))### Need to set up all the alignments of x and y coords coming down from the initial map function.
+            self.track[i].set_connection(initConnect[0],initConnect[1],initConnect[2])### Moved the InitConnect out of the Track __init__()
             coords[1]=coords[1]+1
 
     def set_connection(self,direction,connection):
@@ -298,6 +299,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         for i in range(len(setup)):
             if setup[i][0]==-1:### If it has a value of -1 then it should be a Point()
                 self.line.append(Point(coords,setup[i][1],[0,connections[0],connections[1]]))#### Need to continue passing though the GUI coords.
+                self.line[i].set_connection(0,connections[0],connections[1])### Moved InitConnect out of the Point __init__()
                 coords[0]=coords[0]+1
                 connections[1]=connections[1]+1
             elif setup[i][0]>=1:### Is a Siding of length setup[i][0]
@@ -410,9 +412,9 @@ class Line():### A Line probably going to have a fixed y value but could be alte
     def get_sprites(self):
         sprites = []
         for i in range(len(self.line)):
-            if self.line[i] != -1 and len(self.line[i].get_connections()) == 3:### Just for issues where you have removed components
+            if self.line[i] != -1 and len(self.line[i].get_connection()) == 3:### Just for issues where you have removed components
                 sprites.append(self.line[i])
-            elif self.line[i] != -1 and len(self.line[i].get_connections()) == 2:
+            elif self.line[i] != -1 and len(self.line[i].get_connection()) == 2:
                 siding_sprites = self.line[i].get_track()
                 sprites = self.add_sprites(sprites,siding_sprites)
         return sprites
