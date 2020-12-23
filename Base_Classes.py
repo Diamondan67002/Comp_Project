@@ -42,8 +42,8 @@ class Track(pygame.sprite.Sprite):
     def set_connection(self,direction,lineNum,posNum):### Could change to rationalise it and all the remove connection functions
         self.connections[direction] = [lineNum,posNum]
 
-    def get_connection(self):### Don't really need
-        return self.connections
+    def get_connections(self):### Don't really need
+        return self.connections### Removing the same named functions
 
     def get_connection(self,direction):### Duplicated to allow for 2 different sets of arguments.
         return self.connections[direction]
@@ -216,8 +216,8 @@ class Siding():
     def remove_track(self,sidingPos):### Removes a track but need to write the algoritmn that goes and reconfigure both the connections and all the coordinates.
         self.track[sidingPos] = -1 ### There is quite a few possibilities there though.
 
-    def get_track(self):### For the setting up of the sprite group.
-        return self.track
+    def get_whole_track(self):### For the setting up of the sprite group.
+        return self.track### Removing same named functions
 
     def buildSiding(self,imgNums,coords,initConnect):### Ran upon initiation
         for i in range(self.length):
@@ -230,8 +230,8 @@ class Siding():
     def set_connection(self,direction,connection):
         self.connections[direction] = connection
 
-    def get_connection(self):### Don't really need
-        return self.connections
+    def get_connections(self):### Don't really need
+        return self.connections### Removing same name functions
 
     def get_connection(self,direction):
         return self.connections[direction]
@@ -414,10 +414,10 @@ class Line():### A Line probably going to have a fixed y value but could be alte
     def get_sprites(self):
         sprites = []
         for i in range(len(self.line)):
-            if self.line[i] != -1 and len(self.line[i].get_connection()) == 3:### Just for issues where you have removed components
+            if self.line[i] != -1 and len(self.line[i].get_connections()) == 3:### Just for issues where you have removed components
                 sprites.append(self.line[i])
-            elif self.line[i] != -1 and len(self.line[i].get_connection()) == 2:
-                siding_sprites = self.line[i].get_track()
+            elif self.line[i] != -1 and len(self.line[i].get_connections()) == 2:
+                siding_sprites = self.line[i].get_whole_track()
                 sprites = self.add_sprites(sprites,siding_sprites)
         return sprites
 
