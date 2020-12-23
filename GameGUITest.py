@@ -147,6 +147,8 @@ class Map():
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
         self.get_sprites()
 
+        ### Need to get all the connections going back down the map.
+
     def move_component_x(self,coords):## Would have a issue if we  had the start cooords of 0,0
         print("Hi")
 
@@ -172,11 +174,11 @@ class Map():
     def rotate_componnent(self,direction,coords):
         print("Hi")
 
-    def reconfigure_connections(self,connections,coords):
+    def reconfigure_connections(self,connections,coords):### Not complete yet
         for i in range(len(connections)):
             self.map[coords[1]].delete_connection(connections[i][0],coords)
 
-    def update_map(self):### MOved all the dealing with the sprite group into Map as it actually has the map of sprites
+    def update_map(self):### Moved all the dealing with the sprite group into Map as it actually has the map of sprites
         self.sprites.update()
         return self.sprites
 

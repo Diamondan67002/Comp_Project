@@ -93,7 +93,7 @@ class Track(pygame.sprite.Sprite):
 
     def track_image_rotator(self,direction):
         self.orientation = (self.orientation + direction * 45) % 360
-        if self.orientation < 0:### Shouldn't need.
+        if self.orientation < 0:### Shouldn't need. The mod should do it for me.
             self.orientation = self.orientation + 360
         if self.get_image_num() == 0:
             self.set_image(2)
@@ -169,11 +169,14 @@ class Point(Track):
         self.pointBlade = PointBlade(coords,self.colourKey)### Creating the point Blade to be put over the point
         self.hand = 0
 
-    def change_hand(self):
+    def change_hand(self):### 0 is a Left Handed point and 1 is a Right Handed point.
         self.hand = 1-self.hand
 
     def remove_connection(self):
         self.connections = [-1,-1,-1]
+
+    def get_point_blade(self):
+        return self.pointBlade
 
 class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
     images=["PointBlade-Straight.png","PointBlade-diagonal.png","PointBlade-Curved.png"]### Might need to rebuild as a 2d list.
@@ -225,6 +228,7 @@ class Siding():
                 initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
             self.track.append(Track(coords,imgNums[i]))### Need to set up all the alignments of x and y coords coming down from the initial map function.
             self.track[i].set_connection(initConnect[0],initConnect[1],initConnect[2])### Moved the InitConnect out of the Track __init__()
+            ### Could put the back connection in here. But this won't work for the first object in the list. But then the cuurent init connect setting won't work for the last one.
             coords[1]=coords[1]+1
 
     def set_connection(self,direction,connection):
@@ -242,7 +246,7 @@ class Siding():
             if connections[i][0] == connection[0] and connections[i][1] == connection[1]:
                 return i
 
-    def get_track_connection(self,sidingPos):### Again duplication for different arguments
+    def get_track_connections(self,sidingPos):### Again duplication for different arguments
         return self.track[sidingPos].get_connections()
 
     def get_track_connection(self,direction,sidingPos):
@@ -416,6 +420,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         for i in range(len(self.line)):
             if self.line[i] != -1 and len(self.line[i].get_connections()) == 3:### Just for issues where you have removed components
                 sprites.append(self.line[i])
+                sprites.append(self.line[i].get_point_blade())
             elif self.line[i] != -1 and len(self.line[i].get_connections()) == 2:
                 siding_sprites = self.line[i].get_whole_track()
                 sprites = self.add_sprites(sprites,siding_sprites)
