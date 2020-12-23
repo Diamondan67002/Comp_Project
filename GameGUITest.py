@@ -40,7 +40,7 @@ class Game():
                     if self.positions[0][0] <= mouse[0] <= self.positions[0][0] + self.positions[0][2] and self.positions[0][1] <= mouse[1] <= self.positions[0][1] + self.positions[0][3]:
                         self.map.add_track([self.positions[4][0] / 32, self.positions[4][1] / 32])
                     elif self.positions[1][0] <= mouse[0] <= self.positions[1][0] + self.positions[1][2] and self.positions[1][1] <= mouse[1] <= self.positions[1][1] + self.positions[1][3]:
-                        self.map.add_point()
+                        self.map.add_point([self.positions[4][0] / 32, self.positions[4][1] / 32])
                     elif self.positions[2][0] <= mouse[0] <= self.positions[2][0] + self.positions[2][2] and self.positions[2][1] <= mouse[1] <= self.positions[2][1] + self.positions[2][3]:
                         running = False
                     elif self.positions[3][0] <= mouse[0] <= self.positions[3][0] + self.positions[3][2] and self.positions[3][1] <= mouse[1] <= self.positions[3][1] + self.positions[3][3]:
@@ -191,6 +191,8 @@ class Map():
         for i in range(len(self.map)):
             sprite_list = self.map[i].get_sprites()
             self.add_list_sprites(sprite_list)
+
+    ### Solving algorithmn in here.
 
 game = Game()
 game.build_GUI()

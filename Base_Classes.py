@@ -124,7 +124,7 @@ class Track(pygame.sprite.Sprite):
         self.set_coords(coords)
         self.remove_connection()### Added in case less new connections than old ones
         for i in range(len(connections)):
-            self.add_connection(connections[i][0],connections[i][1],connections[i][2])
+            self.set_connection(connections[i][0],connections[i][1],connections[i][2])
 
     def move_track_point(self,coords):
         self.set_coords(coords)
@@ -203,12 +203,14 @@ class Siding():
         self.buildSiding(imgNums,self.coords,initConnect)
 
     def add_track(self,initConnect):### Appends a track object to the end of the list
-        self.track.append(Track([self.coords[0],self.coords[1]+self.length],0,initConnect))
+        self.track.append(Track([self.coords[0],self.coords[1]+self.length],0))
+        self.track[-1].set_connection(initConnect[0],initConnect[1],initConnect[2])
         self.length=self.length+1
 
     def pre_add_track(self,initConnect):### Adds a track at the start of the list
         self.coords[1]=self.coords[1]-1
-        self.track.insert(0,Track(self.coords,0,initConnect))
+        self.track.insert(0,Track(self.coords,0))
+        self.track[0].set_connection(initConnect[0],initConnect[1],initConnect[2])
         self.length=self.length+1
 
     def remove_track(self,sidingPos):### Removes a track but need to write the algoritmn that goes and reconfigure both the connections and all the coordinates.
@@ -298,7 +300,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
     def buildLine(self,setup,coords,connections):### Actually builds and configures the line. Passing variable into Point() and Siding()
         for i in range(len(setup)):
             if setup[i][0]==-1:### If it has a value of -1 then it should be a Point()
-                self.line.append(Point(coords,setup[i][1],[0,connections[0],connections[1]]))#### Need to continue passing though the GUI coords.
+                self.line.append(Point(coords,setup[i][1]))#### Need to continue passing though the GUI coords.
                 self.line[i].set_connection(0,connections[0],connections[1])### Moved InitConnect out of the Point __init__()
                 coords[0]=coords[0]+1
                 connections[1]=connections[1]+1
