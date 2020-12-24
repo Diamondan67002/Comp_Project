@@ -107,7 +107,7 @@ class Game():
         self.move_selector_y(direction*32)
 
     def place_pickup_component(self):
-        self.map.place_pickup_component([self.positions[4][0] / 32, self.positions[4][1] / 32])
+        self.map.place_pickup_component([int(self.positions[4][0] / 32), int(self.positions[4][1] / 32)])### Shouldn't need int's
 
     def rotate_component(self,direction):
         coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]
