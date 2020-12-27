@@ -202,6 +202,9 @@ class Point(Track):
 
 class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
     images=["PointBlade-Straight.png","PointBlade-diagonal.png","PointBlade-Curved.png"]### Might need to rebuild as a 2d list.
+    directions = [[0,1],
+                  [0,2]]
+
     def __init__(self,coords,colourkey,img):
         self.colourkey=colourkey
         pygame.sprite.Sprite.__init__(self)### Similar to before
@@ -216,6 +219,10 @@ class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to t
 
     def changeDirection(self):
         self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
+
+    def set_image(self,img):
+        self.image = pygame.image.load(os.path.join('photos', self.images[img]))
+        self.imgNum = img
 
 class Siding():
     def __init__(self,length,startCoords,imgNums,initConnect):
@@ -248,7 +255,9 @@ class Siding():
     def buildSiding(self,imgNums,coords,initConnect):### Ran upon initiation
         for i in range(self.length):
             if i>0:
-                initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
+                #initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
+                initConnect[1] = coords[1]
+                initConnect[2] = coords[0]
             self.track.append(Track(coords,imgNums[i]))### Need to set up all the alignments of x and y coords coming down from the initial map function.
             if initConnect[2] > -1:
                 self.track[i].set_connection(initConnect[0],initConnect[1],initConnect[2])### Moved the InitConnect out of the Track __init__()
@@ -336,14 +345,18 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 #print(connections)
                 print(coords)
                 coords[0]=coords[0]+1
-                connections[2]=connections[2]+1
+                #connections[2]=connections[2]+1### Using the coords system now to generate the connections
+                connections[1] = coords[1]
+                connections[2] = coords[0]
             elif setup[i][0]>=1:### Is a Siding of length setup[i][0]
                 #print(coords)
                 self.line.append(Siding(setup[i][0],coords,setup[i][1],[connections[0],connections[1],connections[2]]))### Issues. Coords and connections are effectively duplicates that should be in tegrated together.
                 #print(setup[i][0])
                 #print(coords)
                 #coords[0]=coords[0]+setup[i][0]### not sure why this isn't needed. don't understand where else it is adding the length of the siding to the x coord??
-                connections[2]=connections[2]+setup[i][0]
+                #connections[2]=connections[2]+setup[i][0]### Using the coords system to generate the connections
+                connections[1] = coords[1]
+                connections[2] = coords[0]
 
     def get_component_no(self,x_coord):### Can we chack what type of object an item in a list is??
         x = 0 ### This converts a normal x_coord into a linePos and sidingPos where if it is a Point sidingPos = False
