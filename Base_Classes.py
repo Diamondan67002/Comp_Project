@@ -40,6 +40,9 @@ class Track(pygame.sprite.Sprite):
         self.orientation = 0
         self.curve = 0
 
+        if img == 2:## Could eliminate if required.
+            self.orientation = 45
+
     def set_connection(self,direction,lineNum,posNum):### Could change to rationalise it and all the remove connection functions
         self.connections[direction] = [lineNum,posNum]
 
@@ -92,7 +95,7 @@ class Track(pygame.sprite.Sprite):
     def reflect_image(self,x_bool,y_bool):
         pygame.transform.flip(self.image,x_bool,y_bool)
 
-    def track_image_rotator(self,direction):
+    def image_rotator(self,direction):
         self.orientation = (self.orientation + direction * 45) % 360
         if self.orientation < 0:### Shouldn't need. The mod should do it for me.
             self.orientation = self.orientation + 360
@@ -180,6 +183,22 @@ class Point(Track):
 
     def get_point_blade(self):
         return self.pointBlade
+
+    def image_rotator(self,direction):
+        self.orientation = (self.orientation + direction * 45) % 360
+        if self.orientation < 0:  ### Shouldn't need. The mod should do it for me.
+            self.orientation = self.orientation + 360
+        if self.get_image_num() == 0:
+            self.set_image(1)
+            if self.hand == 1:
+                self.reflect_image(True,False)
+                self.rotate_image(90)
+            self.rotate_image(self.orientation - 45)
+        elif self.get_image_num() == 1:
+            self.set_image(0)
+            if self.hand == 1:
+                self.reflect_image(True,False)
+            self.rotate_image(self.orientation)
 
 class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to the inheritance
     images=["PointBlade-Straight.png","PointBlade-diagonal.png","PointBlade-Curved.png"]### Might need to rebuild as a 2d list.
