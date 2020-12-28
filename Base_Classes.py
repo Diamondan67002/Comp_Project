@@ -254,16 +254,21 @@ class Siding():
 
     def buildSiding(self,imgNums,coords,initConnect):### Ran upon initiation
         for i in range(self.length):
-            if i>0:
-                #initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
-                initConnect[1] = coords[1]
-                initConnect[2] = coords[0]
             self.track.append(Track(coords,imgNums[i]))### Need to set up all the alignments of x and y coords coming down from the initial map function.
             if initConnect[2] > -1:
                 self.track[i].set_connection(initConnect[0],initConnect[1],initConnect[2])### Moved the InitConnect out of the Track __init__()
                 print(initConnect)
+
+            #initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
+            initConnect[1] = coords[1]
+            initConnect[2] = coords[0]
+            #print(initConnect)
             ### Could put the back connection in here. But this won't work for the first object in the list. But then the cuurent init connect setting won't work for the last one.
-            coords[0]=coords[0]+1
+            coords[0] = coords[0] + 1
+            #print(coords)
+            if i > 0:
+                ### put in the previous connection
+                self.track[i-1].set_connection(1,coords[1],coords[0])
 
     def set_connection(self,direction,connection):
         self.connections[direction] = connection
