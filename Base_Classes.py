@@ -259,16 +259,18 @@ class Siding():
                 self.track[i].set_connection(initConnect[0],initConnect[1],initConnect[2])### Moved the InitConnect out of the Track __init__()
                 print(initConnect)
 
+
+            ### Could put the back connection in here. But this won't work for the first object in the list. But then the cuurent init connect setting won't work for the last one.
+            if i > 0:
+                ### put in the previous connection
+                self.track[i-1].set_connection(1,coords[1],coords[0])
+                #print(coords)
             #initConnect[2]=initConnect[2]+1### Need to get it to go back thoug and add all the connections the other way as well.
             initConnect[1] = coords[1]
             initConnect[2] = coords[0]
             #print(initConnect)
-            ### Could put the back connection in here. But this won't work for the first object in the list. But then the cuurent init connect setting won't work for the last one.
             coords[0] = coords[0] + 1
             #print(coords)
-            if i > 0:
-                ### put in the previous connection
-                self.track[i-1].set_connection(1,coords[1],coords[0])
 
     def set_connection(self,direction,connection):
         self.connections[direction] = connection
@@ -348,20 +350,32 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                     self.line[i].set_connection(connections[0],connections[1],connections[2])### Moved InitConnect out of the Point __init__()
                     print(connections)
                 #print(connections)
-                print(coords)
-                coords[0]=coords[0]+1
+                #print(coords)
+                if i > 0:
+                    print("Connect to previous object")
+                    ### Probably need a method as this will be used twice, in bothe the point and siding creation sections
                 #connections[2]=connections[2]+1### Using the coords system now to generate the connections
                 connections[1] = coords[1]
                 connections[2] = coords[0]
+                coords[0] = coords[0] + 1
             elif setup[i][0]>=1:### Is a Siding of length setup[i][0]
                 #print(coords)
                 self.line.append(Siding(setup[i][0],coords,setup[i][1],[connections[0],connections[1],connections[2]]))### Issues. Coords and connections are effectively duplicates that should be in tegrated together.
                 #print(setup[i][0])
                 #print(coords)
+                if i > 0:
+                    print("Connect to previous object")
                 #coords[0]=coords[0]+setup[i][0]### not sure why this isn't needed. don't understand where else it is adding the length of the siding to the x coord??
                 #connections[2]=connections[2]+setup[i][0]### Using the coords system to generate the connections
                 connections[1] = coords[1]
-                connections[2] = coords[0]
+                connections[2] = coords[0] - 1 ### Because the coords are getting changed by
+
+    def set_back_connection(self,index_no):
+        if self.line[index_no] != -1 and len(self.line[index_no].get_connections()) == 3:
+            print("Point")
+        elif self.line[index_no] != -1 and len(self.line[index_no].get_connections()) == 2:
+            print("Siding")
+
 
     def get_component_no(self,x_coord):### Can we chack what type of object an item in a list is??
         x = 0 ### This converts a normal x_coord into a linePos and sidingPos where if it is a Point sidingPos = False
@@ -475,7 +489,6 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 siding_sprites = self.line[i].get_whole_track()
                 sprites = self.add_sprites(sprites,siding_sprites)
         return sprites
-
 
     def add_sprites(self,sprites,sprite_list):
         for i in range(len(sprite_list)):
