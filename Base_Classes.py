@@ -115,6 +115,8 @@ class Track(pygame.sprite.Sprite):
             self.reflect_image(self.curved_track_rotations[index][0],self.curved_track_rotations[index][1])
             self.rotate_image(self.curved_track_rotations[index][2])
 
+    def get_orientation(self):
+        return self.orientation
 
     def get_coords(self):
         return self.coords
@@ -173,6 +175,10 @@ class Point(Track):
         self.vehicle = ''
         self.pointBlade = PointBlade(coords,self.colourKey,img)### Creating the point Blade to be put over the point
         self.hand = 0
+        self.orientation = 0
+
+        if self.imgNum == 2:
+            self.orientation = 45
 
 
     def change_hand(self):### 0 is a Left Handed point and 1 is a Right Handed point.
@@ -287,6 +293,9 @@ class Siding():
             if connections[i][0] == connection[0] and connections[i][1] == connection[1]:
                 return i
 
+    def set_track_connection(self,connection,sidingPos):
+        self.track[sidingPos].set_connection(connection[0],connection[1],connection[2])
+
     def get_track_connections(self,sidingPos):### Again duplication for different arguments
         return self.track[sidingPos].get_connections()
 
@@ -353,6 +362,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 #print(coords)
                 if i > 0:
                     print("Connect to previous object")
+                    self.set_back_connection(i-1,coords)
                     ### Probably need a method as this will be used twice, in bothe the point and siding creation sections
                 #connections[2]=connections[2]+1### Using the coords system now to generate the connections
                 connections[1] = coords[1]
@@ -365,16 +375,22 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 #print(coords)
                 if i > 0:
                     print("Connect to previous object")
+                    self.set_back_connection(i-1, [coords[0], coords[1] - 1])
                 #coords[0]=coords[0]+setup[i][0]### not sure why this isn't needed. don't understand where else it is adding the length of the siding to the x coord??
                 #connections[2]=connections[2]+setup[i][0]### Using the coords system to generate the connections
                 connections[1] = coords[1]
                 connections[2] = coords[0] - 1 ### Because the coords are getting changed by
 
-    def set_back_connection(self,index_no):
+    def set_back_connection(self,index_no,coords):
         if self.line[index_no] != -1 and len(self.line[index_no].get_connections()) == 3:
             print("Point")
+            if self.line[index_no].get_orientation() % 90 == 45:
+                self.line[index_no].set_connection(2,coords[1],coords[0])
+            else:
+                self.line[index_no].set_connection(1,coords[1],coords[0])
         elif self.line[index_no] != -1 and len(self.line[index_no].get_connections()) == 2:
             print("Siding")
+            self.line[index_no].set_track_connection([1,coords[1],coords[0]],-1)
 
 
     def get_component_no(self,x_coord):### Can we chack what type of object an item in a list is??
