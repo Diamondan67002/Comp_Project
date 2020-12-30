@@ -484,6 +484,13 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             return False
         return True
 
+    def return_if_point(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            return True
+        else:
+            return False
+
     def reconfigure_connections(self,x_coord):### reconfigures connections for popped objects was the intention
         print("Hi")
 

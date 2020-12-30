@@ -145,6 +145,8 @@ class Map():
                        [0,1,0]]
         for i in range(3):### Creates each Line()
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
+        ### set back connections between lines.
+
         self.get_sprites()
 
         ### Need to get all the connections going back down the map.
