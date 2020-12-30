@@ -146,10 +146,19 @@ class Map():
         for i in range(3):### Creates each Line()
             self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
         ### set back connections between lines.
+        #self.set_back_connection(connections)
+        self.map[0].set_track_connection(3,[2,1,0])
+        self.map[1].set_track_connection(0,[1,2,0])
 
         self.get_sprites()
 
         ### Need to get all the connections going back down the map.
+
+    def set_back_connection(self,connections):
+        for i in range(len(connections)):
+            if connections[i][1] != -1 and connections[i][2] != -1:
+                print("Hi")
+                ### Not quite sure what I was doing.
 
     def move_component_x(self,coords):## Would have a issue if we  had the start cooords of 0,0
         print("Hi")

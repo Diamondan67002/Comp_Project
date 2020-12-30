@@ -44,6 +44,8 @@ class Track(pygame.sprite.Sprite):
             self.orientation = 45
 
     def set_connection(self,direction,lineNum,posNum):### Could change to rationalise it and all the remove connection functions
+        connection = [direction,lineNum,posNum]
+        print(connection)
         self.connections[direction] = [lineNum,posNum]
 
     def get_connections(self):### Don't really need
@@ -263,7 +265,7 @@ class Siding():
             self.track.append(Track(coords,imgNums[i]))### Need to set up all the alignments of x and y coords coming down from the initial map function.
             if initConnect[2] > -1:
                 self.track[i].set_connection(initConnect[0],initConnect[1],initConnect[2])### Moved the InitConnect out of the Track __init__()
-                print(initConnect)
+                #print(initConnect)
 
 
             ### Could put the back connection in here. But this won't work for the first object in the list. But then the cuurent init connect setting won't work for the last one.
@@ -445,6 +447,13 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         if sidingPos == False:
             return self.line[linePos].get_connection(direction)
         return self.line[linePos].get_track_connection(direction,sidingPos)
+
+    def set_track_connection(self,x_coord,connection):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            self.line[linePos].set_connection(connection[0],connection[1],connection[2])
+        else:
+            self.line[linePos].set_track_connection(connection,sidingPos)
 
     def get_track_point(self,x_coord):### Returns a Track/Point object to be moved
         linePos, sidingPos = self.get_component_no(x_coord)
