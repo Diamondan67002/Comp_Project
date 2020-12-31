@@ -8,6 +8,7 @@ class Game():
                  [100, 470, 100, 30],
                  [200, 470, 100, 30],
                  [300, 470, 100, 30],
+                 [400, 470, 100, 30],
                  [0, 0, 32, 32]]  ### Need to move to be resizable possibly.
 
     def __init__(self):
@@ -24,8 +25,8 @@ class Game():
         width = screen.get_width()
         height = screen.get_height()
         smallfont = pygame.font.SysFont('Corbel', 25)
-        text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color),smallfont.render('Inglenook',True,color),False]### Text for all the buttons
-        colors = [0,0,0,0,1]### Probably going to need to make self for all of these lists and move them out of the functions
+        text = [smallfont.render('Track',True,color),smallfont.render('Point',True,color),smallfont.render('Quit',True,color),smallfont.render('Inglenook',True,color),smallfont.render('Wagon Creation',True,color),False]### Text for all the buttons
+        colors = [0,0,0,0,0,1]### Probably going to need to make self for all of these lists and move them out of the functions
         color_pairs = [[color_light,color_dark],### paired colors for the variations if it is being hovered over.
                        [(220,200,0),(255,255,0)]]
 
@@ -44,7 +45,9 @@ class Game():
                     elif self.positions[2][0] <= mouse[0] <= self.positions[2][0] + self.positions[2][2] and self.positions[2][1] <= mouse[1] <= self.positions[2][1] + self.positions[2][3]:
                         running = False
                     elif self.positions[3][0] <= mouse[0] <= self.positions[3][0] + self.positions[3][2] and self.positions[3][1] <= mouse[1] <= self.positions[3][1] + self.positions[3][3]:
-                        self.map.build_inglenook()### This was my idea bit.
+                        self.map.build_inglenook()
+                    elif self.positions[4][0] <= mouse[0] <= self.positions[4][0] + self.positions[4][2] and self.positions[4][1] <= mouse[1] <= self.positions[4][1] + self.positions[4][3]:
+                        self.create_wagons()
                 elif event.type == pygame.KEYDOWN:### Checks though all the key operations
                     if event.key == pygame.K_KP8:
                         self.move_mover_y(-1)
@@ -113,10 +116,15 @@ class Game():
         coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]
         self.map.rotate_componnent(direction,coords)
 
+    def create_wagons(self):
+        wagon_no = int(input("How many wagons do you want??"))
+        self.map.create_wagons(wagon_no)
+
 class Map():
     map = []
     component = -1
     sprites = pygame.sprite.Group()
+    wagons = []
     def __init__(self):
         print('Hi')
 
@@ -204,6 +212,12 @@ class Map():
         for i in range(len(self.map)):
             sprite_list = self.map[i].get_sprites()
             self.add_list_sprites(sprite_list)
+
+    def create_wagons(self,wagon_no):
+        for i in range(wagon_no):
+            current_wagon = Base_Classes.Wagon(str(i))
+            self.wagons.append(current_wagon)
+        self.add_list_sprites(self.wagons)
 
     ### Solving algorithmn in here.
 

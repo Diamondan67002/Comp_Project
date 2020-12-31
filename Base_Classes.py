@@ -344,8 +344,22 @@ class DeadEndSiding(Siding):### Don't think it will every actually be used.
         self.connections=[-1]
 
 class Wagon():
+    images = ['Wagon-Straight.png']
+    colourKey = (255, 255, 255)
+
     def __init__(self,name):
+        pygame.sprite.Sprite.__init__(self)  ### Same as track
+        self.image = pygame.image.load(os.path.join('photos', self.images[0]))
+        self.image.convert_alpha()
+        self.image.set_colorkey(self.colourKey)  ###????????
+        self.rect = self.image.get_rect()
+
         self.name=name
+
+    def set_coords(self,coords):
+        self.coords = coords
+        self.rect.x = coords[0]*32
+        self.rect.y = coords[1]*32
 
 class Line():### A Line probably going to have a fixed y value but could be altered in future.
     def __init__(self,setup,startCoords,connections):
@@ -359,7 +373,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 self.line.append(Point(coords,setup[i][1]))#### Need to continue passing though the GUI coords.
                 if connections[2] > -1:
                     self.line[i].set_connection(connections[0],connections[1],connections[2])### Moved InitConnect out of the Point __init__()
-                    print(connections)
+                    #print(connections)
                 #print(connections)
                 #print(coords)
                 if i > 0:
@@ -377,7 +391,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 #print(coords)
                 if i > 0:
                     print("Connect to previous object")
-                    self.set_back_connection(i-1, [coords[0], coords[1] - 1])
+                    self.set_back_connection(i-1, [coords[0] - setup[i][0], coords[1]])### Had it wrong needed to subtract from the x_coord not take 1 off the y coord
                 #coords[0]=coords[0]+setup[i][0]### not sure why this isn't needed. don't understand where else it is adding the length of the siding to the x coord??
                 #connections[2]=connections[2]+setup[i][0]### Using the coords system to generate the connections
                 connections[1] = coords[1]
