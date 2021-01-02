@@ -213,6 +213,11 @@ class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to t
     directions = [[0,1],
                   [0,2]]
 
+    curved_blade_rotations = [[False, False, 0],### The  Rotation and reflections to get from the identity curved track image to the one
+                              [False, True, 90],### with a angle of 45 degrees to 180 as over 180 is the same but rotated 180 degrees to
+                              [False, False, 90],  ### start with.
+                              [True, False, 0]]
+
     def __init__(self,coords,colourkey,img):
         self.colourkey=colourkey
         pygame.sprite.Sprite.__init__(self)### Similar to before
@@ -224,13 +229,60 @@ class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to t
         self.rect.y = coords[1] * 32
 
         self.direction=0
+        self.orientation = 0
+
+        if self.imgNum == 1:
+            self.orientation = 45
 
     def changeDirection(self):
         self.direction=1-self.direction ### Probably need to do this for all the other places I need to flip orientation as it is much cleaner.
 
+        if self.direction == 0 and self.orientation % 90 == 0:
+            self.set_image(0)
+        elif self.direction == 0 and self.orientation % 90 == 45:
+            self.set_image(1)
+        elif self.direction == 1:
+            self.set_image(2)
+
+        self.set_image_rotation()
+
+
+
+    def get_image_num(self):
+        return self.imgNum
+
     def set_image(self,img):
         self.image = pygame.image.load(os.path.join('photos', self.images[img]))
         self.imgNum = img
+
+    def rotate_image(self,angle):
+        pygame.transform.rotate(self.image,angle)
+
+    def reflect_image(self,x_bool,y_bool):
+        pygame.transform.flip(self.image,x_bool,y_bool)
+
+    def image_rotator(self,direction):
+        self.orientation = (self.orientation + direction * 45) % 360
+        if self.orientation < 0:### Shouldn't need. The mod should do it for me.
+            self.orientation = self.orientation + 360
+        self.set_image_rotation()
+
+    def set_image_rotation(self):
+        if self.get_image_num() == 0:
+            self.set_image(2)
+            self.rotate_image(self.orientation-45)
+        elif self.get_image_num() == 2:
+            self.set_image(0)
+            self.rotate_image(self.orientation)
+        elif self.get_image_num() == 1:
+            orientation = self.orientation
+            self.set_image(1)### reseting the image to make sure we have the original quality image.
+            if self.orientation > 180:### Hopefully the mod function works for keeping the orientation value below 360 deg
+                self.rotate_image(180)### Could change to reflect in both x & y which would give a better quality image due to non-desctructivity.
+                orientation = orientation - 180
+            index = orientation / 45
+            self.reflect_image(self.curved_blade_rotations[index][0],self.curved_blade_rotations[index][1])
+            self.rotate_image(self.curved_blade_rotations[index][2])
 
 class Siding():
     def __init__(self,length,startCoords,imgNums,initConnect):
