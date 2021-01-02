@@ -390,6 +390,9 @@ class Siding():
             direction = self.track[sidingPos].get_connection_direction(connection)
             self.track[sidingPos].remove_connection(direction)
 
+    def rotate_component(self,sidingPos,direction):
+        self.track[sidingPos].image_rotator(direction)
+
 class DeadEndSiding(Siding):### Don't think it will every actually be used.
     def __init__(self):
         super().__init__()###???????????????????
@@ -593,3 +596,10 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             if sprite_list[i] != -1:### Won't need if there is never any -1's in Line or siding
                 sprites.append(sprite_list[i])
         return sprites
+
+    def rotate_component(self,x_coord,direction):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            self.line[linePos].image_rotator(direction)
+        else:
+            self.line[linePos].rotate_component(sidingPos,direction)

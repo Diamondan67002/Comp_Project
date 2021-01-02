@@ -192,7 +192,7 @@ class Map():
         ### need to put in some form of make connections function.
 
     def rotate_componnent(self,direction,coords):
-        print("Hi")
+        self.map[coords[1]].rotate_componenent(coords[0],direction)
 
     def reconfigure_connections(self,connections,coords):### Not complete yet
         for i in range(len(connections)):
