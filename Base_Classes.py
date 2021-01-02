@@ -343,7 +343,7 @@ class DeadEndSiding(Siding):### Don't think it will every actually be used.
         super().__init__()###???????????????????
         self.connections=[-1]
 
-class Wagon():
+class Wagon(pygame.sprite.Sprite):
     images = ['Wagon-Straight.png']
     colourKey = (255, 255, 255)
 

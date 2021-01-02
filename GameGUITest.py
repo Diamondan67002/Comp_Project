@@ -92,28 +92,28 @@ class Game():
         pygame.quit()
 
     def move_selector_x(self,direction):### Need to make sure it doesn't go off the edges of the screen. Fixed
-        if 0 <= self.positions[4][0] + direction <= 500:### Moves the selector in the x direction
-            self.positions[4][0]=self.positions[4][0] + direction
+        if 0 <= self.positions[5][0] + direction <= 500:### Moves the selector in the x direction
+            self.positions[5][0]=self.positions[5][0] + direction
 
     def move_selector_y(self,direction):### Moves the selector in the y direction
-        if 0 <= self.positions[4][1] + direction <= 500:
-            self.positions[4][1] = self.positions[4][1] + direction
+        if 0 <= self.positions[5][1] + direction <= 500:
+            self.positions[5][1] = self.positions[5][1] + direction
 
     def move_mover_x(self,direction):### Moves the mover and slector and therefore a component where the selector is in the x direction
-        coords = [self.positions[4][0]/32,self.positions[4][1]/32]
+        coords = [self.positions[5][0]/32,self.positions[5][1]/32]
         self.map.move_component_x(coords)
         self.move_selector_x(direction*32)### Converting position movement into Pixels.
 
     def move_mover_y(self,direction):### Moves the mover and selector and therefore a component where the selector is in the y direction
-        coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]### Maybe make coords the new coords?? ### Could make self.coords and refresh every GUI cycle.
+        coords = [self.positions[5][0] / 32, self.positions[5][1] / 32]### Maybe make coords the new coords?? ### Could make self.coords and refresh every GUI cycle.
         self.map.move_component_y(coords)
         self.move_selector_y(direction*32)
 
     def place_pickup_component(self):
-        self.map.place_pickup_component([int(self.positions[4][0] / 32), int(self.positions[4][1] / 32)])### Shouldn't need int's
+        self.map.place_pickup_component([int(self.positions[5][0] / 32), int(self.positions[5][1] / 32)])### Shouldn't need int's
 
     def rotate_component(self,direction):
-        coords = [self.positions[4][0] / 32, self.positions[4][1] / 32]
+        coords = [self.positions[5][0] / 32, self.positions[5][1] / 32]
         self.map.rotate_componnent(direction,coords)
 
     def create_wagons(self):
@@ -125,6 +125,7 @@ class Map():
     component = -1
     sprites = pygame.sprite.Group()
     wagons = []
+    siding_tracks = []
     def __init__(self):
         print('Hi')
 
