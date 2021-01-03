@@ -230,6 +230,7 @@ class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to t
 
         self.direction=0
         self.orientation = 0
+        self.imgNum = img
 
         if self.imgNum == 1:
             self.orientation = 45
