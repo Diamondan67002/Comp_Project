@@ -113,7 +113,7 @@ class Game():
         self.map.place_pickup_component([int(self.positions[5][0] / 32), int(self.positions[5][1] / 32)])### Shouldn't need int's
 
     def rotate_component(self,direction):
-        coords = [self.positions[5][0] / 32, self.positions[5][1] / 32]
+        coords = [int(self.positions[5][0] / 32), int(self.positions[5][1] / 32)]
         self.map.rotate_componnent(direction,coords)
 
     def create_wagons(self):
@@ -192,7 +192,8 @@ class Map():
         ### need to put in some form of make connections function.
 
     def rotate_componnent(self,direction,coords):
-        self.map[coords[1]].rotate_componenent(coords[0],direction)
+        print(coords)
+        self.map[coords[1]].rotate_component(coords[0],direction)
 
     def reconfigure_connections(self,connections,coords):### Not complete yet
         for i in range(len(connections)):

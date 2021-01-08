@@ -25,8 +25,8 @@ class Track(pygame.sprite.Sprite):
         #self.set_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally so I don't have to overload the initiators
 
     def __init__(self,coords,img):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
-        print("Track Commenced")
-        print(coords)
+        #print("Track Commenced")
+        #print(coords)
         pygame.sprite.Sprite.__init__(self)### Initiates the Sprite class
         self.image = pygame.image.load(os.path.join('photos',self.images[img]))### Sets the Image for the Track
         self.image.convert_alpha()
@@ -45,7 +45,7 @@ class Track(pygame.sprite.Sprite):
 
     def set_connection(self,direction,lineNum,posNum):### Could change to rationalise it and all the remove connection functions
         connection = [direction,lineNum,posNum]
-        print(connection)
+        #print(connection)
         self.connections[direction] = [lineNum,posNum]
 
     def get_connections(self):### Don't really need
@@ -160,8 +160,8 @@ class Point(Track):
         #self.set_connection(initConnect[0],initConnect[1],initConnect[2])### Might move externally from the initiator.
 
     def __init__(self,coords,img):
-        print("Point Commenced")
-        print(coords)
+        #print("Point Commenced")
+        #print(coords)
         pygame.sprite.Sprite.__init__(self)### Same as track
         self.image = pygame.image.load(os.path.join('photos',self.images[img]))
         self.image.convert_alpha()
@@ -287,7 +287,7 @@ class PointBlade(pygame.sprite.Sprite):### Need to add pygame.sprite.Sprite to t
 
 class Siding():
     def __init__(self,length,startCoords,imgNums,initConnect):
-        print("Siding Commenced")
+        #print("Siding Commenced")
         self.track=[]
         self.length=length
         self.connections=[-1,-1]
@@ -433,7 +433,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 #print(connections)
                 #print(coords)
                 if i > 0:
-                    print("Connect to previous object")
+                    #print("Connect to previous object")
                     self.set_back_connection(i-1,coords)
                     ### Probably need a method as this will be used twice, in bothe the point and siding creation sections
                 #connections[2]=connections[2]+1### Using the coords system now to generate the connections
@@ -446,7 +446,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
                 #print(setup[i][0])
                 #print(coords)
                 if i > 0:
-                    print("Connect to previous object")
+                    #print("Connect to previous object")
                     self.set_back_connection(i-1, [coords[0] - setup[i][0], coords[1]])### Had it wrong needed to subtract from the x_coord not take 1 off the y coord
                 #coords[0]=coords[0]+setup[i][0]### not sure why this isn't needed. don't understand where else it is adding the length of the siding to the x coord??
                 #connections[2]=connections[2]+setup[i][0]### Using the coords system to generate the connections
@@ -455,43 +455,69 @@ class Line():### A Line probably going to have a fixed y value but could be alte
 
     def set_back_connection(self,index_no,coords):
         if self.line[index_no] != -1 and len(self.line[index_no].get_connections()) == 3:
-            print("Point")
+            #print("Point")
             if self.line[index_no].get_orientation() % 90 == 45:
                 self.line[index_no].set_connection(2,coords[1],coords[0])
             else:
                 self.line[index_no].set_connection(1,coords[1],coords[0])
         elif self.line[index_no] != -1 and len(self.line[index_no].get_connections()) == 2:
-            print("Siding")
+            #print("Siding")
             self.line[index_no].set_track_connection([1,coords[1],coords[0]],-1)
 
 
-    def get_component_no(self,x_coord):### Can we chack what type of object an item in a list is??
-        x = 0 ### This converts a normal x_coord into a linePos and sidingPos where if it is a Point sidingPos = False
+    #def get_component_no(self,x_coord):### Can we chack what type of object an item in a list is??
+        #x = 0 ### This converts a normal x_coord into a linePos and sidingPos where if it is a Point sidingPos = False
+        #linePos = 0
+        #running = True
+        #point = False
+        #sidingPos = False
+        #while running:### Goes and iterates though until the x reaches or is greater than x_coord
+            #if x > x_coord:
+                #sidingPos = x_coord - x
+                #running = False
+            #elif x == x_coord:
+                #running = False
+                #point = True
+
+            #if linePos > len(self.line):
+                #running = False
+                #sidingPos = False
+
+            #if len(self.line[linePos].get_connections()) == 3:### Had these 2 the wrong way around
+                #x += 1
+            #elif len(self.line[linePos].get_connections()) == 2:### Was also using x instead of linePos.
+                #x = x + self.line[linePos].check_length()
+
+            #linePos += 1
+
+        #if point == True:
+            #return linePos, False
+        #return linePos, sidingPos
+
+    def get_component_no(self,x_coord):### New version
+        x = 0
         linePos = 0
-        running = True
         point = False
-        sidingPos = False
-        while running:### Goes and iterates though until the x reaches or is greater than x_coord
+        while x < x_coord:
+            if x == x_coord and len(self.line[linePos].get_connection()) == 3:
+                point = True
+                break
+            elif x == x_coord and len(self.line[linePos].get_connection()) == 2:
+                break
+
             if len(self.line[linePos].get_connections()) == 3:### Had these 2 the wrong way around
                 x +=1
             elif len(self.line[linePos].get_connections()) == 2:### Was also using x instead of linePos.
                 x = x + self.line[linePos].check_length()
-
             linePos += 1
-            if x > x_coord:
-                sidingPos = x_coord - x
-                running = False
-            elif x == x_coord:
-                running = False
-                point = True
-
-            if linePos > len(self.line):
-                running = False
-                sidingPos = False
 
         if point == True:
             return linePos, False
-        return linePos, sidingPos
+        else:
+            return linePos, x_coord - x #- 1
+
+
+
 
     def get_vehicle(self,x_coord):## meed to re configure for when vehichle is empty. Maybe use False and then check for that before passing it back up the chain??
         linePos, sidingPos = self.get_component_no(x_coord)
@@ -599,7 +625,10 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         return sprites
 
     def rotate_component(self,x_coord,direction):
+        print(x_coord)
         linePos, sidingPos = self.get_component_no(x_coord)
+        print(linePos)
+        print(sidingPos)
         if sidingPos == False:
             self.line[linePos].image_rotator(direction)
         else:
