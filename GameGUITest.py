@@ -153,11 +153,11 @@ class Map():
                        [0,0,3],
                        [0,1,0]]
         for i in range(3):### Creates each Line()
-            if connections[i][2] != -1:
-                start_y = connections[i][2] + 1
-            else:
-                start_y = startCoords[0]
-            self.map.append(Base_Classes.Line(setup[i],[start_y,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
+            #if connections[i][2] != -1:
+            #    start_y = connections[i][2] + 1
+            #else:
+                #start_y = startCoords[0]
+            self.map.append(Base_Classes.Line(setup[i],[0,startCoords[1]+i],connections[i]))##need to configure the y coords and the orientations
         ### set back connections between lines.
         #self.set_back_connection(connections)
         self.map[0].set_track_connection(3,[2,1,0])
