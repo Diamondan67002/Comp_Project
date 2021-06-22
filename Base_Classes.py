@@ -48,7 +48,7 @@ class Track(pygame.sprite.Sprite):
         #print(connection)
         self.connections[direction] = [lineNum,posNum]
 
-    def get_connections(self):### Don't really need
+    def get_connection(self):### Don't really need
         return self.connections### Removing the same named functions
 
     def get_connection(self,direction):### Duplicated to allow for 2 different sets of arguments.
