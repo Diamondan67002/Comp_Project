@@ -71,6 +71,8 @@ class Game():
                         self.rotate_component(-1)
                     elif event.key == pygame.K_q:
                         self.rotate_component(1)
+                    elif event.key == pygame.K_r:
+                        self.reflect_component()
 
             screen.fill((255, 255, 255))
 
@@ -113,8 +115,15 @@ class Game():
         self.map.place_pickup_component([int(self.positions[5][0] / 32), int(self.positions[5][1] / 32)])### Shouldn't need int's
 
     def rotate_component(self,direction):
-        coords = [int(self.positions[5][0] / 32), int(self.positions[5][1] / 32)]
+        coords = self.get_coords()
         self.map.rotate_componnent(direction,coords)
+
+    def reflect_component(self):
+        coords = self.get_coords()
+        #
+
+    def get_coords(self):
+        return [int(self.positions[5][0] / 32), int(self.positions[5][1] / 32)]
 
     def create_wagons(self):
         wagon_no = int(input("How many wagons do you want??"))
@@ -198,6 +207,9 @@ class Map():
     def rotate_componnent(self,direction,coords):
         print(coords)
         self.map[coords[1]].rotate_component(coords[0],direction)
+
+    def reflect_component(self):
+        print('Hi')
 
     def reconfigure_connections(self,connections,coords):### Not complete yet
         for i in range(len(connections)):
