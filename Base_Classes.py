@@ -117,6 +117,11 @@ class Track(pygame.sprite.Sprite):
             self.reflect_image(self.curved_track_rotations[index][0],self.curved_track_rotations[index][1])
             self.rotate_image(self.curved_track_rotations[index][2])
 
+    def image_reflector(self):
+        print("Hi")
+        if (self.orientation % 180) == 0:
+            self.reflect_image(True,False)###Will probably change to use a 2d list like curved track rotations.
+
     def get_orientation(self):
         return self.orientation
 
@@ -394,6 +399,9 @@ class Siding():
     def rotate_component(self,sidingPos,direction):
         self.track[sidingPos].image_rotator(direction)
 
+    def reflect_component(self,sidingPos):
+        self.track[sidingPos].image_reflector()
+
 class DeadEndSiding(Siding):### Don't think it will every actually be used.
     def __init__(self):
         super().__init__()###???????????????????
@@ -495,7 +503,7 @@ class Line():### A Line probably going to have a fixed y value but could be alte
         #return linePos, sidingPos
 
     def get_component_no(self,x_coord):### New version
-        x = 0
+        x = self.startCoords[0]
         linePos = 0
         point = False
         while x < x_coord:
@@ -633,3 +641,10 @@ class Line():### A Line probably going to have a fixed y value but could be alte
             self.line[linePos].image_rotator(direction)
         else:
             self.line[linePos].rotate_component(sidingPos,direction)
+
+    def reflect_component(self,x_coord):
+        linePos, sidingPos = self.get_component_no(x_coord)
+        if sidingPos == False:
+            self.line[linePos].image_reflector()
+        else:
+            self.line[linePos].reflect_component(sidingPos)
