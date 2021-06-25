@@ -7,6 +7,10 @@ class Track(pygame.sprite.Sprite):
                               [False,True,90],### with a angle of 45 degrees to 180 as over 180 is the same but rotated 180 degrees to
                               [False,False,90],### start with.
                               [True,False,0]]
+    reflection_transformations = [[True,False,0],
+                                  [True,False,-90],
+                                  [False,True,0],
+                                  [False,True,90]]
 
     #def __init__(self,coords,img,initConnect):### Image loading could be made bettter by preloading all the png's into python rather than loading 1 everytime an object is created or image altered
         #print("Track Commenced")
@@ -117,10 +121,10 @@ class Track(pygame.sprite.Sprite):
             self.reflect_image(self.curved_track_rotations[index][0],self.curved_track_rotations[index][1])
             self.rotate_image(self.curved_track_rotations[index][2])
 
-    def image_reflector(self):
-        print("Hi")
-        if (self.orientation % 180) == 0:
-            self.reflect_image(True,False)###Will probably change to use a 2d list like curved track rotations.
+    def image_reflector(self):## Don't need for Tracks as the reflection transformations can be written as a rotational transformation as they have symmetry where as the Point has no symmetries.
+        reflect_num = (self.orientation % 180) / 45
+        self.reflect_image(self.reflection_transformations[reflect_num][0],self.reflection_transformations[reflect_num][1])
+        self.rotate_image(self.reflection_transformations[reflect_num][2])
 
     def get_orientation(self):
         return self.orientation
